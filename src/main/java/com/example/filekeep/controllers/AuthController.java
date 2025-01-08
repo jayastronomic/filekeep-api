@@ -1,6 +1,8 @@
 package com.example.filekeep.controllers;
 
 import com.example.filekeep.models.User;
+import com.example.filekeep.reponses.ApiResponse;
+import com.example.filekeep.enums.Status;
 import com.example.filekeep.services.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +25,28 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> create(@Valid @RequestBody User userObject){
+    public ResponseEntity<ApiResponse<String>> register(@Valid @RequestBody User payload){
         return ResponseEntity
                 .created(URI.create("/api/v1/auth/register"))
-                .body(authService.create(userObject));
+                .body(ApiResponse.<String>builder()
+                        .data(this.authService.register(payload))
+                        .message("Account created")
+                        .status(Status.SUCCESS)
+                        .path("/api/v1/auth/register")
+                        .build()
+                );
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<String>> login(@Valid @RequestBody User payload){
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.<String>builder()
+                        .data(this.authService.login(payload))
+                        .message("Successfully logged in")
+                        .status(Status.SUCCESS)
+                        .path("/api/v1/auth/login")
+                        .build()
+                );
     }
 }
