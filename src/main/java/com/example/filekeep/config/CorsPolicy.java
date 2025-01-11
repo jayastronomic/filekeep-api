@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * The CorsPolicy configuration class defines Cross-Origin Resource Sharing (CORS) settings for the NailCare application.
+ * The CorsPolicy configuration class defines Cross-Origin Resource Sharing (CORS) settings.
  */
 @Configuration
 public class CorsPolicy {
