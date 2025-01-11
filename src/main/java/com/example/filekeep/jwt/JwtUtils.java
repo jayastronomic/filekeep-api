@@ -32,8 +32,7 @@ public class JwtUtils {
     }
 
 
-    public String generateTokenFromUsername(UserDetails userDetails){
-        String username = userDetails.getUsername();
+    public String generateTokenFromUsername(String username){
         return Jwts.builder()
                 .subject(username)
                 .signWith(key())

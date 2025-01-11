@@ -1,2 +1,33 @@
+# Project-specific settings
 .idea/
+.vscode/
+
+# Local application configuration
 application-local.yaml
+
+# Byte-compiled class files
+*.class
+
+# Gradle build files
+.gradle/*
+build/
+bin/
+
+# Log files
+*.log
+*.log.*
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Compiled application
+*.jar
+*.war

@@ -1,11 +1,11 @@
 package com.example.filekeep.services;
 
 import com.example.filekeep.config.AuthUserDetails;
+import com.example.filekeep.exceptions.InvalidCredentialsException;
 import com.example.filekeep.exceptions.UserAlreadyExistException;
 import com.example.filekeep.jwt.JwtUtils;
 import com.example.filekeep.models.User;
 import com.example.filekeep.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,13 +15,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthService {
+public class AuthService extends ApplicationService{
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
 
-    @Autowired
     public AuthService(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder, JwtUtils jwtUtils, @Lazy AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -33,7 +32,8 @@ public class AuthService {
         boolean exists = userRepository.existsByEmail(payload.getEmail());
         if (exists) throw new UserAlreadyExistException(payload.getEmail());
         payload.setPassword(passwordEncoder.encode(payload.getPassword()));
-        String jwt = jwtUtils.generateTokenFromUsername(new AuthUserDetails(payload));
+        String username = payload.getEmail();
+        String jwt = jwtUtils.generateTokenFromUsername(username);
         userRepository.save(payload);
         return jwt;
     }
@@ -43,11 +43,14 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(payload.getEmail(), payload.getPassword());
         try {
             Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            AuthUserDetails authUserDetails = (AuthUserDetails) authentication.getPrincipal();
-            return jwtUtils.generateTokenFromUsername(authUserDetails);
+            String username = ((AuthUserDetails) authentication.getPrincipal()).getUsername();
+            return jwtUtils.generateTokenFromUsername(username);
         } catch (Exception e) {
-            throw new RuntimeException("Invalid email/password");
+            throw new InvalidCredentialsException();
         }
+    }
+
+    public User isLoggedIn(){
+        return currentUser();
     }
 }

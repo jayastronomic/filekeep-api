@@ -1,8 +1,5 @@
 package com.example.filekeep.exceptions;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
 /**
  * Custom exception class for indicating that a user already exists in the system.
  */
