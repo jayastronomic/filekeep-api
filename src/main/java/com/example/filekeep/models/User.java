@@ -1,6 +1,5 @@
 package com.example.filekeep.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,7 +17,6 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @Builder
-
 public class User extends ApplicationEntity<User>{
     @Column(unique = true, updatable = false)
     @Email(message = "Invalid email format")
