@@ -33,7 +33,8 @@ public class SecurityConfiguration {
                 .requestMatchers(
                         "/api/v1/auth/login",
                         "/api/v1/auth/register",
-                        "/api/v1/users" ).permitAll()
+                        "/api/v1/users",
+                        "/delete_resources" ).permitAll()
                 .anyRequest().authenticated());
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);

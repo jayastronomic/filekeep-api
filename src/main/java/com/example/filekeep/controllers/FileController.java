@@ -1,6 +1,7 @@
 package com.example.filekeep.controllers;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.filekeep.enums.Status;
+import com.example.filekeep.models.File;
 import com.example.filekeep.reponses.ApiResponse;
 import com.example.filekeep.services.FileService;
 
@@ -49,5 +51,18 @@ public class FileController {
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(fileService.downloadFile(fileKey));
                 
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<File>>> getUserFiles(){
+        return ResponseEntity
+                .ok(
+                    ApiResponse.<List<File>>builder()
+                    .data(fileService.getUserFiles())
+                    .message("Files loaded succesfully.")
+                    .status(Status.SUCCESS)
+                    .path("/api/v1/files")
+                    .build()
+                );
     }
 }

@@ -49,8 +49,4 @@ public abstract class ApplicationEntity<T> {
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date updatedAt;
-
-    public ApplicationEntity(UUID id) {
-        this.id = id;
-    }
 }
