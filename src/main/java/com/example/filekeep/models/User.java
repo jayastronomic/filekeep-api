@@ -37,13 +37,10 @@ public class User extends ApplicationEntity<User>{
     private String password;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<File> files;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Folder> folders;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private RootDirectory root;
 }

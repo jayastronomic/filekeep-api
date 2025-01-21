@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -43,9 +44,9 @@ public class Folder extends ApplicationEntity<Folder> {
     @JoinColumn(name = "parent_folder_id")
     private Folder parentFolder;
 
-    @OneToMany(mappedBy = "parentFolder", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Folder> subfolders;
+    @OneToMany(mappedBy = "parentFolder", orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Folder> subFolders;
 
-    @OneToMany(mappedBy = "folder", orphanRemoval = true)
-    private List<File> files;
+    @OneToMany(mappedBy = "folder", orphanRemoval = true, cascade = CascadeType.ALL)
+    private final List<File> files = new ArrayList<>();
 }

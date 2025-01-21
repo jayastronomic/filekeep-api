@@ -39,7 +39,7 @@ public class File extends ApplicationEntity<File> {
     @NotBlank(message = "MIME type cannot be blank")
     private String mimeType;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @NotBlank(message = "File key cannot be blank")
     private String fileKey;
 
@@ -50,7 +50,7 @@ public class File extends ApplicationEntity<File> {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "folder_id", nullable = false)
+    @JoinColumn(name = "folder_id", nullable = true)
     private Folder folder;
 
     public File build(MultipartFile file){

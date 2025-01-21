@@ -4,13 +4,16 @@ import com.example.filekeep.config.AuthUserDetails;
 import com.example.filekeep.exceptions.InvalidCredentialsException;
 import com.example.filekeep.exceptions.UserAlreadyExistException;
 import com.example.filekeep.jwt.JwtUtils;
+import com.example.filekeep.models.Folder;
 import com.example.filekeep.models.User;
 import com.example.filekeep.repositories.UserRepository;
+
+import java.util.ArrayList;
+
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +35,14 @@ public class AuthService extends ApplicationService{
         boolean exists = userRepository.existsByEmail(payload.getEmail());
         if (exists) throw new UserAlreadyExistException(payload.getEmail());
         payload.setPassword(passwordEncoder.encode(payload.getPassword()));
+        Folder root = new Folder();
+        root.setFolderName("/");
+        root.setUser(payload);
+        payload.setFolders(new ArrayList<>());
+        payload.getFolders().add(root);
+        userRepository.save(payload);
         String username = payload.getEmail();
         String jwt = jwtUtils.generateTokenFromUsername(username);
-        userRepository.save(payload);
         return jwt;
     }
 
