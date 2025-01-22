@@ -2,6 +2,7 @@ package com.example.filekeep.services;
 
 import org.springframework.stereotype.Service;
 
+import com.example.filekeep.dtos.NewFolderDto;
 import com.example.filekeep.models.Folder;
 import com.example.filekeep.repositories.FolderRepository;
 
@@ -16,6 +17,16 @@ public class FolderService extends ApplicationService {
 
     public Folder getRoot(){
         return folderRepository.getFolderByUserIdAndFolderName(currentUser().getId(), "/");
+    }
+
+    public Folder createFolder(NewFolderDto payload){
+        Folder parent = folderRepository.findById(payload.parentId()).orElseThrow();
+        Folder newFolder = Folder.builder()
+                                .folderName(payload.folderName())
+                                .parentFolder(parent)
+                                .user(currentUser())
+                                .build();
+        return this.folderRepository.save(newFolder);
     }
 }
 

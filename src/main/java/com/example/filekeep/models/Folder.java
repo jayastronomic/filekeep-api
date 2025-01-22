@@ -41,11 +41,12 @@ public class Folder extends ApplicationEntity<Folder> {
 
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "parent_folder_id")
     private Folder parentFolder;
 
     @OneToMany(mappedBy = "parentFolder", orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Folder> subFolders;
+    private final List<Folder> subFolders = new ArrayList<>();
 
     @OneToMany(mappedBy = "folder", orphanRemoval = true, cascade = CascadeType.ALL)
     private final List<File> files = new ArrayList<>();
