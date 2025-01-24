@@ -1,7 +1,9 @@
 package com.example.filekeep.services;
 
 import com.example.filekeep.config.AuthUserDetails;
+import com.example.filekeep.dtos.NewUserDto;
 import com.example.filekeep.exceptions.InvalidCredentialsException;
+import com.example.filekeep.exceptions.PasswordMismatchException;
 import com.example.filekeep.exceptions.UserAlreadyExistException;
 import com.example.filekeep.jwt.JwtUtils;
 import com.example.filekeep.models.Folder;
@@ -31,19 +33,21 @@ public class AuthService extends ApplicationService{
         this.authenticationManager = authenticationManager;
     }
 
-    public String register(User payload) throws UserAlreadyExistException {
-        boolean exists = userRepository.existsByEmail(payload.getEmail());
-        if (exists) throw new UserAlreadyExistException(payload.getEmail());
-        payload.setPassword(passwordEncoder.encode(payload.getPassword()));
+    public String register(NewUserDto payload) throws UserAlreadyExistException {
+        boolean exists = userRepository.existsByEmail(payload.email());
+        if (exists) throw new UserAlreadyExistException(payload.email());
+        if (!payload.password().equals(payload.passwordConfirmation())) throw new PasswordMismatchException();
+        User newUser = User.builder()
+                            .email(payload.email())
+                            .password(passwordEncoder.encode(payload.password()))
+                            .build();
         Folder root = new Folder();
         root.setFolderName("/");
-        root.setUser(payload);
-        payload.setFolders(new ArrayList<>());
-        payload.getFolders().add(root);
-        userRepository.save(payload);
-        String username = payload.getEmail();
-        String jwt = jwtUtils.generateTokenFromUsername(username);
-        return jwt;
+        root.setUser(newUser);
+        newUser.getFolders().add(root);
+        newUser = userRepository.save(newUser);
+        String username = newUser.getEmail();
+        return jwtUtils.generateTokenFromUsername(username);
     }
 
     public String login(User payload){

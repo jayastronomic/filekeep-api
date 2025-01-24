@@ -27,7 +27,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class File extends ApplicationEntity<File> {
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @NotBlank(message = "File name cannot be blank")
     private String fileName;
 

@@ -2,6 +2,7 @@ package com.example.filekeep.controllers;
 
 import com.example.filekeep.models.User;
 import com.example.filekeep.reponses.ApiResponse;
+import com.example.filekeep.dtos.NewUserDto;
 import com.example.filekeep.enums.Status;
 import com.example.filekeep.services.AuthService;
 import jakarta.validation.Valid;
@@ -12,14 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@CrossOrigin(origins = "*")
 public class AuthController {
     private final AuthService authService;
 
@@ -28,11 +26,11 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<String>> register(@Valid @RequestBody User payload){
+    public ResponseEntity<ApiResponse<String>> register(@Valid @RequestBody NewUserDto payload){
         return ResponseEntity
                 .created(URI.create("/api/v1/auth/register"))
                 .body(ApiResponse.<String>builder()
-                        .data(this.authService.register(payload))
+                        .data(authService.register(payload))
                         .message("Account created")
                         .status(Status.SUCCESS)
                         .path("/api/v1/auth/register")
@@ -45,7 +43,7 @@ public class AuthController {
         return ResponseEntity
                 .ok()
                 .body(ApiResponse.<String>builder()
-                        .data(this.authService.login(payload))
+                        .data(authService.login(payload))
                         .message("Successfully logged in")
                         .status(Status.SUCCESS)
                         .path("/api/v1/auth/login")
@@ -58,7 +56,7 @@ public class AuthController {
         return ResponseEntity
                 .ok()
                 .body(ApiResponse.<User>builder()
-                .data(this.authService.isLoggedIn())
+                .data(authService.isLoggedIn())
                 .message("User is authenticated")
                 .status(Status.SUCCESS)
                 .path("/api/v1/auth/logged_in")

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.filekeep.exceptions.FileNameAlreadyExistsException;
 import com.example.filekeep.models.File;
 import com.example.filekeep.models.Folder;
 import com.example.filekeep.repositories.FileRepository;
@@ -35,19 +36,11 @@ public class FileService extends ApplicationService {
     }
 
     public String uploadFile(MultipartFile file, UUID parentId) {
-        String fileKey = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        boolean exists = fileRepository.existsByUserIdAndFileName(currentUser().getId(), file.getOriginalFilename());
+        if(exists) throw new FileNameAlreadyExistsException(file.getOriginalFilename());
+        String fileKey = currentUser().getId() + "_" + System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        uploadToAWS(file, fileKey);
         File newFile = new File();
-        try (InputStream inputStream = file.getInputStream()) {
-            s3Client.putObject(
-                    PutObjectRequest.builder()
-                            .bucket(bucketName)
-                            .key(fileKey)
-                            .build(),
-                    RequestBody.fromInputStream(inputStream, file.getSize())
-            );
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to upload file to S3", e);
-        }
         newFile.setFileKey(fileKey);
         newFile.build(file);
         newFile.setUser(currentUser());
@@ -74,6 +67,21 @@ public class FileService extends ApplicationService {
 
     public List<File> getUserFiles(){
       return fileRepository.findByUserId(currentUser().getId());  
+    }
+
+    private boolean uploadToAWS(MultipartFile file, String fileKey){
+        try (InputStream inputStream = file.getInputStream()) {
+            s3Client.putObject(
+                    PutObjectRequest.builder()
+                            .bucket(bucketName)
+                            .key(fileKey)
+                            .build(),
+                    RequestBody.fromInputStream(inputStream, file.getSize())
+            );
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to upload file to S3", e);
+        }
     }
     
 }

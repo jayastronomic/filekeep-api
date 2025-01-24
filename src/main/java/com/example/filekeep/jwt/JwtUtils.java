@@ -5,8 +5,9 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.example.filekeep.exceptions.JwtValidationException;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
@@ -67,15 +68,19 @@ public class JwtUtils {
             return true;
         } catch (SecurityException e) {
             logger.log(Level.SEVERE, "Invalid JWT signature: {}", e.getMessage());
+            throw new JwtValidationException("Invalid JWT signature.");
         } catch (MalformedJwtException e) {
             logger.log(Level.SEVERE, "Invalid JWT token: {}", e.getMessage());
+            throw new JwtValidationException("Invalid JWT token.");
         } catch (ExpiredJwtException e) {
             logger.log(Level.SEVERE, "JWT token is expired: {}", e.getMessage());
+            throw new JwtValidationException("JWT token is expired.");
         } catch (UnsupportedJwtException e) {
             logger.log(Level.SEVERE, "JWT token is unsupported: {}", e.getMessage());
+            throw new JwtValidationException("JWT token is unsupported.");
         } catch (IllegalArgumentException e) {
             logger.log(Level.SEVERE, "JWT claims string is empty: {}", e.getMessage());
+            throw new JwtValidationException("JWT claims string is empty.");
         }
-        return false;
     }
 }

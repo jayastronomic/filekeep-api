@@ -9,4 +9,5 @@ import com.example.filekeep.models.File;
 
 public interface FileRepository extends JpaRepository<File, UUID> {
     List<File> findByUserId(UUID userId);
+    boolean existsByUserIdAndFileName(UUID userId, String fileName);
 }
