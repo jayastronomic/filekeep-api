@@ -2,7 +2,6 @@ package com.example.filekeep.controllers;
 
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -32,12 +31,12 @@ public class FileController {
 
 
     @PostMapping(path = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ApiResponse<String>> upload(@RequestParam("file") MultipartFile file, @RequestParam("parent_id") UUID parentId){
+    public ResponseEntity<ApiResponse<String>> upload(@RequestParam("file") MultipartFile file, @RequestParam("folder_name") String folderName){
         return ResponseEntity
                 .created(URI.create("/api/v1/files/upload"))
                 .body(ApiResponse.<String>builder()
-                .data(fileService.uploadFile(file, parentId))
-                .message("File uploaded succesfully")
+                .data(fileService.uploadFile(file, folderName))
+                .message("File uploaded succesfully to " + folderName + " folder")
                 .path("/api/v1/files/upload")
                 .status(Status.SUCCESS)
                 .build()

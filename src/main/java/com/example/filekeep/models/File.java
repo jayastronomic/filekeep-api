@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "files")
+@Table(
+    name = "files",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"file_name", "folder_id"})
+    }
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,7 +33,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class File extends ApplicationEntity<File> {
-    @Column(nullable = false)
+    @Column(name = "file_name", nullable = false)
     @NotBlank(message = "File name cannot be blank")
     private String fileName;
 

@@ -28,5 +28,10 @@ public class FolderService extends ApplicationService {
                                 .build();
         return this.folderRepository.save(newFolder);
     }
+
+
+    public Folder getFolder(String folderName) {
+        return folderRepository.getFolderByUserIdAndFolderName(currentUser().getId(), folderName);
+    }
 }
 

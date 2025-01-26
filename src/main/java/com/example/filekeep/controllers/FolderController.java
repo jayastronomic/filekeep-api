@@ -4,6 +4,7 @@ import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,7 @@ import com.example.filekeep.reponses.ApiResponse;
 import com.example.filekeep.services.FolderService;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/folders")
 public class FolderController {
     private final FolderService folderService;
 
@@ -48,5 +49,17 @@ public class FolderController {
             .status(Status.SUCCESS)
             .build()
             );
+    }
+
+    @GetMapping("/{folderName}")
+    public ResponseEntity<ApiResponse<Folder>> getFolder(@PathVariable("folderName") String folderName){
+        return ResponseEntity
+                .ok(ApiResponse.<Folder>builder()
+                .message(folderName + " folder successfully fetched")
+                .data(folderService.getFolder(folderName))
+                .path("/api/v1/folders/" + folderName)
+                .status(Status.SUCCESS)
+                .build()
+                );
     }
 }

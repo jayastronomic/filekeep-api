@@ -35,16 +35,15 @@ public class FileService extends ApplicationService {
         this.folderRepository = folderRepository;
     }
 
-    public String uploadFile(MultipartFile file, UUID parentId) {
-        boolean exists = fileRepository.existsByUserIdAndFileName(currentUser().getId(), file.getOriginalFilename());
-        if(exists) throw new FileNameAlreadyExistsException(file.getOriginalFilename());
+    public String uploadFile(MultipartFile file, String folderName) {
+        System.out.println(folderName );
         String fileKey = currentUser().getId() + "_" + System.currentTimeMillis() + "_" + file.getOriginalFilename();
         uploadToAWS(file, fileKey);
         File newFile = new File();
         newFile.setFileKey(fileKey);
         newFile.build(file);
         newFile.setUser(currentUser());
-        Folder parent = folderRepository.findById(parentId).orElseThrow();
+        Folder parent = folderRepository.getFolderByUserIdAndFolderName(currentUser().getId(), folderName);
         parent.getFiles().add(newFile);
         newFile.setFolder(parent);
         folderRepository.save(parent);
