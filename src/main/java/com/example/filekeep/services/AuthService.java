@@ -10,8 +10,6 @@ import com.example.filekeep.models.Folder;
 import com.example.filekeep.models.User;
 import com.example.filekeep.repositories.UserRepository;
 
-import java.util.ArrayList;
-
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,7 +40,7 @@ public class AuthService extends ApplicationService{
                             .password(passwordEncoder.encode(payload.password()))
                             .build();
         Folder root = new Folder();
-        root.setFolderName("/");
+        root.setFolderName("home");
         root.setUser(newUser);
         newUser.getFolders().add(root);
         newUser = userRepository.save(newUser);

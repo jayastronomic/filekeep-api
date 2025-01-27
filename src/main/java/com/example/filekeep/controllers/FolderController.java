@@ -32,20 +32,20 @@ public class FolderController {
                 .ok(ApiResponse.<Folder>builder()
                 .message("Root successfully fetched")
                 .data(folderService.getRoot())
-                .path("/api/v1/root")
+                .path("/api/v1/folders/root")
                 .status(Status.SUCCESS)
                 .build()
                 );
     }
 
-    @PostMapping("/create_folder")
+    @PostMapping
     public ResponseEntity<ApiResponse<Folder>> createFolder(@RequestBody NewFolderDto newFolder){
         return ResponseEntity
-        .created(URI.create("/api/v1/create_folder"))
+        .created(URI.create("/api/v1/folders"))
         .body(ApiResponse.<Folder>builder()
             .message("Folder created!")
             .data(folderService.createFolder(newFolder))
-            .path("/api/v1/create_folder")
+            .path("/api/v1/folders")
             .status(Status.SUCCESS)
             .build()
             );

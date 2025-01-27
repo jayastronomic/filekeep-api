@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,4 +66,19 @@ public class FileController {
                     .build()
                 );
     }
+
+    @DeleteMapping("{fileKey}")
+    public ResponseEntity<ApiResponse<String>> deleteFile(@PathVariable("fileKey") String fileKey){
+        return ResponseEntity
+                .ok(
+                    ApiResponse.<String>builder()
+                    .data(fileService.deleteFile(fileKey))
+                    .message("Files deleted succesfully.")
+                    .status(Status.SUCCESS)
+                    .path("/api/v1/files/" + fileKey)
+                    .build()
+                );
+    }
+    
 }
+

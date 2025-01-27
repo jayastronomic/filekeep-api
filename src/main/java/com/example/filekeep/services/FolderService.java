@@ -16,11 +16,13 @@ public class FolderService extends ApplicationService {
     }
 
     public Folder getRoot(){
-        return folderRepository.getFolderByUserIdAndFolderName(currentUser().getId(), "/");
+        return folderRepository.getFolderByUserIdAndFolderName(currentUser().getId(), "home");
     }
 
     public Folder createFolder(NewFolderDto payload){
-        Folder parent = folderRepository.findById(payload.parentId()).orElseThrow();
+        System.out.println(payload);
+        Folder parent = folderRepository.getFolderByUserIdAndFolderName(currentUser().getId(), payload.parentName());
+       
         Folder newFolder = Folder.builder()
                                 .folderName(payload.folderName())
                                 .parentFolder(parent)
