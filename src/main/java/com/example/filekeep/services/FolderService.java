@@ -15,8 +15,8 @@ public class FolderService extends ApplicationService {
         this.folderRepository = folderRepository;
     }
 
-    public Folder getRoot(){
-        return folderRepository.getFolderByUserIdAndFolderName(currentUser().getId(), "home");
+    public Folder getFolder(String folderName) {
+        return folderRepository.getFolderByUserIdAndFolderName(currentUser().getId(), folderName);
     }
 
     public Folder createFolder(NewFolderDto payload){
@@ -31,9 +31,5 @@ public class FolderService extends ApplicationService {
         return this.folderRepository.save(newFolder);
     }
 
-
-    public Folder getFolder(String folderName) {
-        return folderRepository.getFolderByUserIdAndFolderName(currentUser().getId(), folderName);
-    }
 }
 

@@ -26,13 +26,13 @@ public class FolderController {
     }
 
 
-    @GetMapping("/root")
-    public ResponseEntity<ApiResponse<Folder>> getRoot(){
+    @GetMapping("/{folderName}")
+    public ResponseEntity<ApiResponse<Folder>> getFolder(@PathVariable("folderName") String folderName){
         return ResponseEntity
                 .ok(ApiResponse.<Folder>builder()
-                .message("Root successfully fetched")
-                .data(folderService.getRoot())
-                .path("/api/v1/folders/root")
+                .message(folderName + " folder successfully fetched")
+                .data(folderService.getFolder(folderName))
+                .path("/api/v1/folders/" + folderName)
                 .status(Status.SUCCESS)
                 .build()
                 );
@@ -49,17 +49,5 @@ public class FolderController {
             .status(Status.SUCCESS)
             .build()
             );
-    }
-
-    @GetMapping("/{folderName}")
-    public ResponseEntity<ApiResponse<Folder>> getFolder(@PathVariable("folderName") String folderName){
-        return ResponseEntity
-                .ok(ApiResponse.<Folder>builder()
-                .message(folderName + " folder successfully fetched")
-                .data(folderService.getFolder(folderName))
-                .path("/api/v1/folders/" + folderName)
-                .status(Status.SUCCESS)
-                .build()
-                );
     }
 }
