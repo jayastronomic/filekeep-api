@@ -31,3 +31,5 @@ Thumbs.db
 # Compiled application
 *.jar
 *.war
+
+#ec2
