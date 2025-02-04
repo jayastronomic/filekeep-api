@@ -1,8 +1,10 @@
 package com.example.filekeep.controllers;
 
 import java.net.URI;
+import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +17,8 @@ import com.example.filekeep.enums.Status;
 import com.example.filekeep.models.Folder;
 import com.example.filekeep.reponses.ApiResponse;
 import com.example.filekeep.services.FolderService;
+
+import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping("/api/v1/folders")
@@ -49,5 +53,18 @@ public class FolderController {
             .status(Status.SUCCESS)
             .build()
             );
+    }
+
+    @Transactional
+    @DeleteMapping("/{folderId}")
+    public ResponseEntity<ApiResponse<String>> deleteFolder(@PathVariable("folderId") UUID folderId){
+        return ResponseEntity
+                .ok(ApiResponse.<String>builder()
+                .message("Folder successfully deleted with id: " + folderId)
+                .data(folderService.deleteFolder(folderId))
+                .path("/api/v1/folders/" + folderId)
+                .status(Status.SUCCESS)
+                .build()
+                );
     }
 }
