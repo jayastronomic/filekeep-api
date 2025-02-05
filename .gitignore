@@ -33,3 +33,7 @@ Thumbs.db
 *.war
 
 #ec2
+ec2-user@3.140.250.83
+
+#env
+.env

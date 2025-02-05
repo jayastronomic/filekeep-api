@@ -1,7 +1,10 @@
 version: "3.8"
 services:
   api:
+    container_name: api
     build: .
+    env_file:
+      - .env
     environment:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
@@ -11,10 +14,16 @@ services:
       S3_BUCKET_NAME: ${S3_BUCKET_NAME}
       S3_ACCESS_KEY: ${S3_ACCESS_KEY}
       S3_SECRET_KEY: ${S3_SECRET_KEY}
-    ports: -"8080:8080"
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+    ports:
+      - "8080:8080"
     depends_on:
       - db
   db:
+    container_name: db
+    env_file:
+      - .env
     image: postgres:15
     restart: always
     environment:
