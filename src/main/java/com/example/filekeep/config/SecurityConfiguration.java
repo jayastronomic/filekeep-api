@@ -40,9 +40,8 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers(
                         "/api/v1/auth/login",
-                        "/api/v1/auth/register",
-                        "/api/v1/users",
-                        "/delete_resources").permitAll()
+                        "/api/v1/auth/register"
+                        ).permitAll()
                 .anyRequest().authenticated());
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
