@@ -2,7 +2,6 @@ version: "3.8"
 services:
   api:
     container_name: api
-    build: .
     env_file:
       - .env
     environment:
@@ -18,6 +17,13 @@ services:
       JWT_EXPIRATION: ${JWT_EXPIRATION}
     ports:
       - "8080:8080"
+    build:
+      context: . # 👈 Add this line to specify the build directory
+      dockerfile: Dockerfile.local # Use the local development Dockerfile
+    volumes:
+      - .:/app # Mounts local project directory into the container
+    working_dir: /app
+    command: ./gradlew bootRun # Runs app in development mode
     depends_on:
       - db
   db:

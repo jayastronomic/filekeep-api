@@ -2,6 +2,9 @@ server:
   port: ${PORT:8080}
   tomcat:
     max-swallow-size: -1
+cors:
+  allowed:
+    origins: ${ALLOWED_ORIGINS}
 spring:
   application:
     name: filekeep

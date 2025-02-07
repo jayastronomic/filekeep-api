@@ -13,7 +13,7 @@ import com.example.filekeep.repositories.UserRepository;
 public class ApplicationController {
     private final UserRepository userRepository;
     private final FileRepository fileRepository;
-    private int called = 0;
+    private int called = 2;
 
     public ApplicationController(UserRepository userRepository, FileRepository fileRepository){
         this.userRepository = userRepository;
