@@ -22,8 +22,9 @@ services:
       dockerfile: Dockerfile.local # Use the local development Dockerfile
     volumes:
       - .:/app # Mounts local project directory into the container
+      - ~/.gradle:/home/gradle/.gradle # Cache Gradle dependencies for faster builds
     working_dir: /app
-    command: ./gradlew bootRun # Runs app in development mode
+    command: ./gradlew clean bootRun # Runs app in development mode
     depends_on:
       - db
   db:
