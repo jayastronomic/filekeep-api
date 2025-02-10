@@ -2,12 +2,12 @@ server:
   port: ${PORT:8080}
   tomcat:
     max-swallow-size: -1
-cors:
-  allowed:
-    origins: ${ALLOWED_ORIGINS}
 spring:
   application:
     name: filekeep
+  web:
+    cors:
+      allowed-origins: ${ALLOWED_ORIGINS}
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${SPRING_DATASOURCE_URL}
@@ -16,11 +16,12 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
         format-sql: true
     show-sql: true
     hibernate:
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
   servlet:
     multipart:
       max-file-size: 1GB
