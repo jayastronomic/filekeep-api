@@ -38,14 +38,15 @@ public class AuthService extends ApplicationService{
         User newUser = User.builder()
                             .email(payload.email())
                             .password(passwordEncoder.encode(payload.password()))
+                            .firstName(payload.firstName())
+                            .lastName(payload.lastName())
                             .build();
         Folder root = new Folder();
         root.setFolderName("home");
         root.setUser(newUser);
         newUser.getFolders().add(root);
         newUser = userRepository.save(newUser);
-        String username = newUser.getEmail();
-        return jwtUtils.generateTokenFromUsername(username);
+        return jwtUtils.generateTokenFromUsername(newUser.getEmail());
     }
 
     public String login(User payload){

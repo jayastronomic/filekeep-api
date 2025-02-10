@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-add-last-name-to-user
+      author: Julian Smith
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
