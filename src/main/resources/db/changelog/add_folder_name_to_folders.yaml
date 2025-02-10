@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 012-add-folder-name-to-folders
+      author: Julian Smith
+      changes:
+        - addColumn:
+            tableName: folders
+            columns:
+              - column:
+                  name: folder_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false

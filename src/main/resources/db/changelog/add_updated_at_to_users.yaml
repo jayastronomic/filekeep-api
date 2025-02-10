@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 008-add-updated-at-to-users
+      author: Julian Smith
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false

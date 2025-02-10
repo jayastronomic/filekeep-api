@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 010-add-created-at-to-files
+      author: Julian Smith
+      changes:
+        - addColumn:
+            tableName: files
+            columns:
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false

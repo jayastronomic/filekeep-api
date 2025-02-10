@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 013-add-unique-constraints-to-files
+      author: Julian Smith
+      changes:
+        - addUniqueConstraint:
+            tableName: files
+            columnNames: file_name, folder_id
+            constraintName: unique_file_name_folder_combination

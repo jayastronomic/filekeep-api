@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 008-add-created-at-to-folders
+      author: Julian Smith
+      changes:
+        - addColumn:
+            tableName: folders
+            columns:
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false

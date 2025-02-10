@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 011-add-updated-at-to-files
+      author: Julian Smith
+      changes:
+        - addColumn:
+            tableName: files
+            columns:
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false

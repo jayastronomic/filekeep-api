@@ -5,3 +5,19 @@ databaseChangeLog:
       file: db/changelog/add_first_name_to_users.yaml
   - include:
       file: db/changelog/add_last_name_to_users.yaml
+  - include:
+      file: db/changelog/add_created_at_to_users.yaml
+  - include:
+      file: db/changelog/add_updated_at_to_users.yaml
+  - include:
+      file: db/changelog/add_created_at_to_folders.yaml
+  - include:
+      file: db/changelog/add_updated_at_to_folders.yaml
+  - include:
+      file: db/changelog/add_created_at_to_files.yaml
+  - include:
+      file: db/changelog/add_updated_at_to_files.yaml
+  - include:
+      file: db/changelog/add_folder_name_to_folders.yaml
+  - include:
+      file: db/changelog/add_unique_constraints_to_files.yaml

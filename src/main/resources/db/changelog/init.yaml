@@ -4,9 +4,9 @@ databaseChangeLog:
       author: Julian Smith
       preConditions:
         - onFail: MARK_RAN
-          not:
-            tableExists:
-              tableName: users
+        - not:
+            - tableExists:
+                tableName: users
       changes:
         - createTable:
             tableName: users
@@ -34,8 +34,8 @@ databaseChangeLog:
       preConditions:
         - onFail: MARK_RAN
           not:
-            tableExists:
-              tableName: folders
+            - tableExists:
+                tableName: folders
       changes:
         - createTable:
             tableName: folders
@@ -69,8 +69,8 @@ databaseChangeLog:
       preConditions:
         - onFail: MARK_RAN
           not:
-            tableExists:
-              tableName: files
+            - tableExists:
+                tableName: files
       changes:
         - createTable:
             tableName: files

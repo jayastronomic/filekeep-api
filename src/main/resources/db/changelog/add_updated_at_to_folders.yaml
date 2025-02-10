@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 009-add-updated-at-to-folders
+      author: Julian Smith
+      changes:
+        - addColumn:
+            tableName: folders
+            columns:
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
