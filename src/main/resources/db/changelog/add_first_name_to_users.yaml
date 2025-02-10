@@ -9,6 +9,5 @@ databaseChangeLog:
               - column:
                   name: first_name
                   type: VARCHAR(255)
-                  defaultValue: "Unknown"
                   constraints:
                     nullable: false
