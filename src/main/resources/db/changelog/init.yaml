@@ -1,0 +1,120 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-create-user-table
+      author: Julian Smith
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            tableExists:
+              tableName: users
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(250)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 003-create-folder-table
+      author: Julian Smith
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            tableExists:
+              tableName: folders
+      changes:
+        - createTable:
+            tableName: folders
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_folder_user
+                    references: users(id)
+                    onDelete: CASCADE
+              - column:
+                  name: parent_folder_id
+                  type: UUID
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_folder_parent_folder
+                    references: folders(id)
+                    onDelete: CASCADE
+
+  - changeSet:
+      id: 004-create-file-table
+      author: Julian Smith
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            tableExists:
+              tableName: files
+      changes:
+        - createTable:
+            tableName: files
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_file_user
+                    references: users(id)
+                    onDelete: CASCADE
+              - column:
+                  name: file_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: size
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: mime_type
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_key
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: folder_id
+                  type: UUID
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_file_folder
+                    references: folders(id)
+                    onDelete: CASCADE
