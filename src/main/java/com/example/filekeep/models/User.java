@@ -44,4 +44,7 @@ public class User extends ApplicationEntity<User>{
     @JsonIgnore
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private final List<Folder> folders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<FileAccess> sharedFiles = new ArrayList<>();
 }
