@@ -12,59 +12,68 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.filekeep.dtos.NewFolderDto;
-import com.example.filekeep.enums.Status;
-import com.example.filekeep.models.Folder;
-import com.example.filekeep.reponses.ApiResponse;
+import com.example.filekeep.dtos.FolderData;
+import com.example.filekeep.dtos.NewFolderData;
+import com.example.filekeep.reponses.ApiSuccessResponse;
+import com.example.filekeep.requests.ShareFolderRequest;
 import com.example.filekeep.services.FolderService;
+import com.example.filekeep.services.SharedAccessService;
 
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/folders")
 public class FolderController {
     private final FolderService folderService;
-
-    public FolderController(FolderService folderService){
-        this.folderService = folderService;
-    }
-
+    private final SharedAccessService sharedAccessService;
 
     @GetMapping("/{folderName}")
-    public ResponseEntity<ApiResponse<Folder>> getFolder(@PathVariable("folderName") String folderName){
+    public ResponseEntity<ApiSuccessResponse<FolderData>> getFolder(@PathVariable("folderName") String folderName){
         return ResponseEntity
-                .ok(ApiResponse.<Folder>builder()
+                .ok(ApiSuccessResponse.<FolderData>builder()
                 .message(folderName + " folder successfully fetched")
                 .data(folderService.getFolder(folderName))
                 .path("/api/v1/folders/" + folderName)
-                .status(Status.SUCCESS)
                 .build()
                 );
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Folder>> createFolder(@RequestBody NewFolderDto newFolder){
+    public ResponseEntity<ApiSuccessResponse<FolderData>> createFolder(@RequestBody NewFolderData newFolder){
         return ResponseEntity
         .created(URI.create("/api/v1/folders"))
-        .body(ApiResponse.<Folder>builder()
+        .body(ApiSuccessResponse.<FolderData>builder()
             .message("Folder created!")
             .data(folderService.createFolder(newFolder))
             .path("/api/v1/folders")
-            .status(Status.SUCCESS)
             .build()
             );
     }
 
     @Transactional
     @DeleteMapping("/{folderId}")
-    public ResponseEntity<ApiResponse<String>> deleteFolder(@PathVariable("folderId") UUID folderId){
+    public ResponseEntity<ApiSuccessResponse<String>> deleteFolder(@PathVariable("folderId") UUID folderId){
         return ResponseEntity
-                .ok(ApiResponse.<String>builder()
+                .ok(ApiSuccessResponse.<String>builder()
                 .message("Folder successfully deleted with id: " + folderId)
-                .data(folderService.deleteFolder(folderId))
                 .path("/api/v1/folders/" + folderId)
-                .status(Status.SUCCESS)
                 .build()
+                );
+    }
+
+
+    @PostMapping("/share")
+    public ResponseEntity<ApiSuccessResponse<String>> shareFile(@RequestBody ShareFolderRequest payload) {
+        return ResponseEntity
+                .ok()
+                .body(
+                    ApiSuccessResponse.<String>builder()
+                    .data(sharedAccessService.shareFolder(payload))
+                    .message("Successfully shared folder.")
+                    .path("/api/v1/files/share_file")
+                    .build()
                 );
     }
 }

@@ -1,11 +1,13 @@
 package com.example.filekeep.controllers;
 
-import com.example.filekeep.models.User;
-import com.example.filekeep.reponses.ApiResponse;
-import com.example.filekeep.dtos.NewUserDto;
-import com.example.filekeep.enums.Status;
+import com.example.filekeep.reponses.ApiSuccessResponse;
+import com.example.filekeep.requests.NewUserData;
+import com.example.filekeep.dtos.LoginData;
+import com.example.filekeep.dtos.UserData;
 import com.example.filekeep.services.AuthService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,49 +18,43 @@ import java.net.URI;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
     private final AuthService authService;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
-
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<String>> register(@Valid @RequestBody NewUserDto payload){
+    public ResponseEntity<ApiSuccessResponse<String>> register(@Valid @RequestBody NewUserData payload){
         return ResponseEntity
                 .created(URI.create("/api/v1/auth/register"))
-                .body(ApiResponse.<String>builder()
+                .body(ApiSuccessResponse.<String>builder()
                         .data(authService.register(payload))
                         .message("Account created")
-                        .status(Status.SUCCESS)
                         .path("/api/v1/auth/register")
                         .build()
                 );
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<String>> login(@Valid @RequestBody User payload){
+    public ResponseEntity<ApiSuccessResponse<String>> login(@Valid @RequestBody LoginData payload){
         return ResponseEntity
                 .ok()
-                .body(ApiResponse.<String>builder()
+                .body(ApiSuccessResponse.<String>builder()
                         .data(authService.login(payload))
                         .message("Successfully logged in")
-                        .status(Status.SUCCESS)
                         .path("/api/v1/auth/login")
                         .build()
                 );
     }
 
     @GetMapping("/logged_in")
-    public ResponseEntity<ApiResponse<User>> loggedIn() {
+    public ResponseEntity<ApiSuccessResponse<UserData>> loggedIn() {
         return ResponseEntity
                 .ok()
-                .body(ApiResponse.<User>builder()
+                .body(ApiSuccessResponse.<UserData>builder()
                 .data(authService.isLoggedIn())
                 .message("User is authenticated")
-                .status(Status.SUCCESS)
                 .path("/api/v1/auth/logged_in")
                 .build()
                 );

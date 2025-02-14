@@ -16,24 +16,27 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name ="file_access")
+@Table(name ="shared_access")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FileAccess extends ApplicationEntity<FileAccess> {
+public class SharedAccess extends ApplicationEntity<SharedAccess> {
 
     @ManyToOne
-    @JoinColumn(name = "file_id", nullable = false)
+    @JoinColumn(name = "file_id")
     private File file;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "folder_id")
+    private Folder folder;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AccessType accessType; // Defines permission type (VIEW, EDIT, etc.)
-    
 }

@@ -21,3 +21,15 @@ databaseChangeLog:
       file: db/changelog/add_folder_name_to_folders.yaml
   - include:
       file: db/changelog/add_unique_constraints_to_files.yaml
+  - include:
+      file: db/changelog/create_file_access_table.yaml
+  - include:
+      file: db/changelog/add_timestamps_to_file_access.yaml
+  - include:
+      file: db/changelog/rename_file_access_to_shared_access.yaml
+  - include:
+      file: db/changelog/add_folder_id_to_shared_access.yaml
+  - include:
+      file: db/changelog/change_file_id_to_nullable_on_shared_access.yaml
+  - include:
+      file: db/changelog/add_unique_constraint_to_shared_access.yaml

@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 015-add-timestamps-to-file-access
+      author: Julian Smith
+      changes:
+        - addColumn:
+            tableName: file_access
+            columns:
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+        - addColumn:
+            tableName: file_access
+            columns:
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false

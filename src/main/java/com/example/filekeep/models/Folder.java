@@ -14,7 +14,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,7 +26,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Builder
 public class Folder extends ApplicationEntity<Folder> {
     @Column(nullable = false)
     @NotBlank(message = "Folder name cannot be blank")
@@ -39,7 +37,6 @@ public class Folder extends ApplicationEntity<Folder> {
     private User user;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "parent_folder_id")
     private Folder parentFolder;
 
@@ -48,4 +45,13 @@ public class Folder extends ApplicationEntity<Folder> {
 
     @OneToMany(mappedBy = "folder", orphanRemoval = true, cascade = CascadeType.ALL)
     private final List<File> files = new ArrayList<>();
+
+    @OneToMany(mappedBy = "folder",  orphanRemoval = true, cascade = CascadeType.ALL)
+    private final List<SharedAccess> SharedAccessList = new ArrayList<>();
+
+    public Folder(String folderName, Folder parentFolder, User user){
+        this.folderName = folderName;
+        this.parentFolder = parentFolder;
+        this.user = user;
+    }
 }

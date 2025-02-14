@@ -1,7 +1,6 @@
 package com.example.filekeep.controllers;
 
 import java.net.URI;
-import java.util.List;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,31 +14,31 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.filekeep.enums.Status;
-import com.example.filekeep.models.File;
-import com.example.filekeep.reponses.ApiResponse;
+import com.example.filekeep.reponses.ApiSuccessResponse;
+import com.example.filekeep.requests.ShareFileRequest;
 import com.example.filekeep.services.FileService;
+import com.example.filekeep.services.SharedAccessService;
 
+import lombok.AllArgsConstructor;
+
+import org.springframework.web.bind.annotation.RequestBody;
+
+
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/files")
 public class FileController {
     private final FileService fileService;
-
-
-    public FileController(FileService fileService){
-        this.fileService = fileService;
-    }
-
+    private final SharedAccessService sharedAccessService;
 
     @PostMapping(path = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ApiResponse<String>> upload(@RequestParam("file") MultipartFile file, @RequestParam("folder_name") String folderName){
+    public ResponseEntity<ApiSuccessResponse<String>> upload(@RequestParam("file") MultipartFile file, @RequestParam("folder_name") String folderName){
         return ResponseEntity
                 .created(URI.create("/api/v1/files/upload"))
-                .body(ApiResponse.<String>builder()
+                .body(ApiSuccessResponse.<String>builder()
                 .data(fileService.uploadFile(file, folderName))
                 .message("File uploaded succesfully to " + folderName + " folder")
                 .path("/api/v1/files/upload")
-                .status(Status.SUCCESS)
                 .build()
                 );
     }
@@ -54,31 +53,29 @@ public class FileController {
                 
     }
 
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<File>>> getUserFiles(){
-        return ResponseEntity
-                .ok(
-                    ApiResponse.<List<File>>builder()
-                    .data(fileService.getUserFiles())
-                    .message("Files loaded succesfully.")
-                    .status(Status.SUCCESS)
-                    .path("/api/v1/files")
-                    .build()
-                );
-    }
-
     @DeleteMapping("{fileKey}")
-    public ResponseEntity<ApiResponse<String>> deleteFile(@PathVariable("fileKey") String fileKey){
+    public ResponseEntity<ApiSuccessResponse<String>> deleteFile(@PathVariable("fileKey") String fileKey){
         return ResponseEntity
                 .ok(
-                    ApiResponse.<String>builder()
+                    ApiSuccessResponse.<String>builder()
                     .data(fileService.deleteFile(fileKey))
                     .message("Files deleted succesfully.")
-                    .status(Status.SUCCESS)
                     .path("/api/v1/files/" + fileKey)
                     .build()
                 );
     }
-    
+
+    @PostMapping("/share")
+    public ResponseEntity<ApiSuccessResponse<String>> shareFile(@RequestBody ShareFileRequest payload) {
+        return ResponseEntity
+                .ok()
+                .body(
+                    ApiSuccessResponse.<String>builder()
+                    .data(sharedAccessService.shareFile(payload))
+                    .message("Successfully shared file.")
+                    .path("/api/v1/files/share_file")
+                    .build()
+                );
+    }
 }
 

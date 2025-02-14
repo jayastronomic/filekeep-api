@@ -3,7 +3,7 @@ package com.example.filekeep.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.filekeep.requests.NewUserData;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
@@ -22,7 +22,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Builder
 public class User extends ApplicationEntity<User>{
     @Column(unique = true, updatable = false)
     private String email;
@@ -37,14 +36,21 @@ public class User extends ApplicationEntity<User>{
     @Column(nullable = false)
     private String lastName;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private final List<File> files = new ArrayList<>();
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private final List<Folder> folders = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<FileAccess> sharedFiles = new ArrayList<>();
+    private final List<SharedAccess> sharedAccesses = new ArrayList<>();
+
+
+    public User(NewUserData userData, String encodedPassword) {
+        this.email = userData.email();
+        this.password = encodedPassword;
+        this.firstName = userData.firstName();
+        this.lastName = userData.lastName();
+    }
+
 }

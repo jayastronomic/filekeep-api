@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 016-rename-file-access-to-shared-access
+      author: Julian Smith
+      changes:
+        - renameTable:
+            oldTableName: file_access
+            newTableName: shared_access

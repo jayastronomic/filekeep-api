@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 018-change-file-id-to-nullable-on-shared-access
+      author: Julian Smith
+      changes:
+        - dropNotNullConstraint:
+            tableName: shared_access
+            columnName: file_id
+            columnDataType: UUID

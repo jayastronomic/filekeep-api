@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 019-add-unique-constraint-to-shared-access
+      author: Julian Smith
+      changes:
+        - addUniqueConstraint:
+            tableName: shared_access
+            columnNames: user_id, folder_id
+            constraintName: unique_user_folder_combination

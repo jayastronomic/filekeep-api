@@ -42,7 +42,7 @@ public class S3Service {
     }
 
 
-    public boolean uploadFileToAWS(MultipartFile file, String fileKey){
+    public void uploadFileToAWS(MultipartFile file, String fileKey){
         try (InputStream inputStream = file.getInputStream()) {
             s3Client.putObject(
                     PutObjectRequest.builder()
@@ -51,13 +51,12 @@ public class S3Service {
                             .build(),
                     RequestBody.fromInputStream(inputStream, file.getSize())
             );
-            return true;
         } catch (Exception e) {
             throw new RuntimeException("Failed to upload file to S3", e);
         }
     }
 
-    public boolean deleteFileFromAWS(String fileKey){
+    public void deleteFileFromAWS(String fileKey){
         try {
             // Create a DeleteObjectRequest
             DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
@@ -69,7 +68,6 @@ public class S3Service {
             s3Client.deleteObject(deleteObjectRequest);
 
             System.out.println("File deleted successfully: " + fileKey);
-            return true;
         } catch (Exception e) {
             throw new RuntimeException("Failed to delete file from S3 bucket: " + fileKey, e);
         }

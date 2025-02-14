@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 017-add-folder-id-to-shared-access
+      author: julian Smith
+      changes:
+        - addColumn:
+            tableName: shared_access
+            columns:
+              - column:
+                  name: folder_id
+                  type: UUID
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_shared_access_folder
+                    references: folders(id)
+                    onDelete: CASCADE

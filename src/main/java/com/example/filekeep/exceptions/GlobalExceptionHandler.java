@@ -1,7 +1,6 @@
 package com.example.filekeep.exceptions;
 
-import com.example.filekeep.enums.Status;
-import com.example.filekeep.reponses.ApiResponse;
+import com.example.filekeep.reponses.ApiErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -21,12 +20,11 @@ public class GlobalExceptionHandler {
      */
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(UserAlreadyExistException.class)
-    public ResponseEntity<ApiResponse<String>> handleUserAlreadyExistExceptions(UserAlreadyExistException ex) {
+    public ResponseEntity<ApiErrorResponse> handleUserAlreadyExistExceptions(UserAlreadyExistException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(ApiResponse.<String>builder()
+                .body(ApiErrorResponse.builder()
                         .message(ex.getMessage())
-                        .status(Status.ERROR)
                         .build()
                 );
     }
@@ -51,12 +49,11 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(PasswordMismatchException.class)
-    public ResponseEntity<ApiResponse<String>> handleValidationExceptions(PasswordMismatchException ex) {
+    public ResponseEntity<ApiErrorResponse> handleValidationExceptions(PasswordMismatchException ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.<String>builder()
+                .body(ApiErrorResponse.builder()
                         .message(ex.getMessage())
-                        .status(Status.ERROR)
                         .build()
                 );
     }
@@ -64,12 +61,11 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(InvalidCredentialsException.class)
-    public ResponseEntity<ApiResponse<String>> handleUserAlreadyExistExceptions(InvalidCredentialsException ex) {
+    public ResponseEntity<ApiErrorResponse> handleUserAlreadyExistExceptions(InvalidCredentialsException ex) {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(ApiResponse.<String>builder()
+                .body(ApiErrorResponse.builder()
                         .message(ex.getMessage())
-                        .status(Status.ERROR)
                         .build()
                 );
     }
@@ -82,28 +78,22 @@ public class GlobalExceptionHandler {
      */
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(JwtValidationException.class)
-    public ResponseEntity<ApiResponse<String>> handleJwtValidationException(JwtValidationException ex) {
+    public ResponseEntity<ApiErrorResponse> handleJwtValidationException(JwtValidationException ex) {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(ApiResponse.<String>builder()
-                        .data(null)
+                .body(ApiErrorResponse.builder()
                         .message(ex.getMessage())
-                        .status(Status.ERROR)
-                        .path("/api/v1/auth/logged_in")
                         .build()
                 );
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(FileNameAlreadyExistsException.class)
-    public ResponseEntity<ApiResponse<String>> handleFileNameAlreadyExistsException(FileNameAlreadyExistsException ex) {
+    public ResponseEntity<ApiErrorResponse> handleFileNameAlreadyExistsException(FileNameAlreadyExistsException ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.<String>builder()
-                        .data(null)
+                .body(ApiErrorResponse.builder()
                         .message(ex.getMessage())
-                        .status(Status.ERROR)
-                        .path("/api/v1/upload")
                         .build()
                 );
     }
