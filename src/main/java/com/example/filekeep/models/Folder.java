@@ -23,8 +23,8 @@ import lombok.ToString;
 @Table(name = "folders")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class Folder extends ApplicationEntity<Folder> {
     @Column(nullable = false)
@@ -49,9 +49,8 @@ public class Folder extends ApplicationEntity<Folder> {
     @OneToMany(mappedBy = "folder",  orphanRemoval = true, cascade = CascadeType.ALL)
     private final List<SharedAccess> SharedAccessList = new ArrayList<>();
 
-    public Folder(String folderName, Folder parentFolder, User user){
+    public Folder(String folderName, User user){
         this.folderName = folderName;
-        this.parentFolder = parentFolder;
         this.user = user;
     }
 }

@@ -1,12 +1,12 @@
 package com.example.filekeep.controllers;
 
 import com.example.filekeep.reponses.ApiSuccessResponse;
-import com.example.filekeep.requests.NewUserData;
 import com.example.filekeep.dtos.LoginData;
+import com.example.filekeep.dtos.NewUserData;
 import com.example.filekeep.dtos.UserData;
 import com.example.filekeep.services.AuthService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {

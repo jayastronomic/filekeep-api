@@ -3,6 +3,7 @@ package com.example.filekeep.services;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.filekeep.exceptions.FolderDoesNotExistException;
 import com.example.filekeep.models.File;
 import com.example.filekeep.models.Folder;
 import com.example.filekeep.models.User;
@@ -18,7 +19,7 @@ public class FileService extends ApplicationService {
     private final FolderRepository folderRepository;
     private final S3Service s3sService;
     
-    public String uploadFile(MultipartFile file, String folderName) {
+    public String uploadFile(MultipartFile file, String folderName) throws FolderDoesNotExistException {
         User user = currentUser();
     
         // Create file key for  S3
@@ -28,7 +29,9 @@ public class FileService extends ApplicationService {
         s3sService.uploadFileToAWS(file, fileKey);
     
         // Fetch the folder to save in
-        Folder folder = folderRepository.getFolderByUserIdAndFolderName(user.getId(), folderName);
+        Folder folder = folderRepository.getFolderByUserIdAndFolderName(user.getId(), folderName)
+                                            .orElseThrow(() -> new FolderDoesNotExistException(folderName));
+        ;
         
         // Create and save new File entity
         File newFile = File.builder()

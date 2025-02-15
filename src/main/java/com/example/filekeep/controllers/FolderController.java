@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.filekeep.dtos.FolderData;
 import com.example.filekeep.dtos.NewFolderData;
+import com.example.filekeep.dtos.ShareFolderData;
 import com.example.filekeep.reponses.ApiSuccessResponse;
-import com.example.filekeep.requests.ShareFolderRequest;
 import com.example.filekeep.services.FolderService;
 import com.example.filekeep.services.SharedAccessService;
 
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/folders")
 public class FolderController {
@@ -65,7 +65,7 @@ public class FolderController {
 
 
     @PostMapping("/share")
-    public ResponseEntity<ApiSuccessResponse<String>> shareFile(@RequestBody ShareFolderRequest payload) {
+    public ResponseEntity<ApiSuccessResponse<String>> shareFile(@RequestBody ShareFolderData payload) {
         return ResponseEntity
                 .ok()
                 .body(

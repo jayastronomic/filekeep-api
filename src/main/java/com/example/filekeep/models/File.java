@@ -27,8 +27,8 @@ import lombok.ToString;
 )
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Builder
 public class File extends ApplicationEntity<File> {

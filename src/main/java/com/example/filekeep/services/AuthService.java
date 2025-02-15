@@ -2,6 +2,7 @@ package com.example.filekeep.services;
 
 import com.example.filekeep.config.AuthUserDetails;
 import com.example.filekeep.dtos.LoginData;
+import com.example.filekeep.dtos.NewUserData;
 import com.example.filekeep.dtos.UserData;
 import com.example.filekeep.exceptions.InvalidCredentialsException;
 import com.example.filekeep.exceptions.PasswordMismatchException;
@@ -10,7 +11,7 @@ import com.example.filekeep.jwt.JwtUtils;
 import com.example.filekeep.models.Folder;
 import com.example.filekeep.models.User;
 import com.example.filekeep.repositories.UserRepository;
-import com.example.filekeep.requests.NewUserData;
+
 
 import lombok.AllArgsConstructor;
 
@@ -30,14 +31,12 @@ public class AuthService extends ApplicationService{
     private final AuthenticationManager authenticationManager;
 
   
-    public String register(NewUserData payload) throws UserAlreadyExistException {
+    public String register(NewUserData payload) throws UserAlreadyExistException, PasswordMismatchException {
         boolean exists = userRepository.existsByEmail(payload.email());
         if (exists) throw new UserAlreadyExistException(payload.email());
         if (!payload.password().equals(payload.passwordConfirmation())) throw new PasswordMismatchException();
         User newUser = new User(payload, passwordEncoder.encode(payload.password()));                   
-        Folder root = new Folder();
-        root.setFolderName("home");
-        root.setUser(newUser);
+        newUser.getFolders().add(new Folder("home", newUser));
         newUser = userRepository.save(newUser);
         return jwtUtils.generateTokenFromUsername(newUser.getEmail());
     }

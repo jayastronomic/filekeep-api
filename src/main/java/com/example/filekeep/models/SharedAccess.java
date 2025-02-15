@@ -19,9 +19,9 @@ import lombok.Setter;
 @Table(name ="shared_access")
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class SharedAccess extends ApplicationEntity<SharedAccess> {
 
     @ManyToOne
@@ -39,4 +39,19 @@ public class SharedAccess extends ApplicationEntity<SharedAccess> {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AccessType accessType; // Defines permission type (VIEW, EDIT, etc.)
+
+
+    public SharedAccess(User user, Folder folder, AccessType accessType) {
+        this.file = null;
+        this.user = user;
+        this.folder = folder;
+        this.accessType = accessType;
+    }
+
+    public SharedAccess(User user, File file, AccessType accessType) {
+        this.file = file;
+        this.user = user;
+        this.folder = null;
+        this.accessType = accessType;
+    }
 }

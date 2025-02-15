@@ -3,7 +3,7 @@ package com.example.filekeep.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.filekeep.requests.NewUserData;
+import com.example.filekeep.dtos.NewUserData;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
@@ -13,7 +13,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import lombok.*;
-
 
 @Entity
 @Table(name = "users")
@@ -52,5 +51,4 @@ public class User extends ApplicationEntity<User>{
         this.firstName = userData.firstName();
         this.lastName = userData.lastName();
     }
-
 }
