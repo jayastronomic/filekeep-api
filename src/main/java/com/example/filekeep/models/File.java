@@ -54,5 +54,5 @@ public class File extends ApplicationEntity<File> {
     private Folder folder;
 
     @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<SharedAccess> SharedAccessList = new ArrayList<>();
+    private final List<SharedAccess> collaborators  = new ArrayList<>();
 }

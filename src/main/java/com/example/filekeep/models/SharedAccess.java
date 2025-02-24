@@ -9,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name ="shared_access")
+@Table(
+    name ="shared_access",
+        uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"folder_id", "collaborator_id"}),
+        @UniqueConstraint(columnNames = {"file_id", "collaborator_id"})
+    }
+)
 @Getter
 @Setter
 @AllArgsConstructor
@@ -29,8 +36,12 @@ public class SharedAccess extends ApplicationEntity<SharedAccess> {
     private File file;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "collaborator_id", nullable = false)
+    private User collaborator;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
 
     @ManyToOne
     @JoinColumn(name = "folder_id")
@@ -41,16 +52,18 @@ public class SharedAccess extends ApplicationEntity<SharedAccess> {
     private AccessType accessType; // Defines permission type (VIEW, EDIT, etc.)
 
 
-    public SharedAccess(User user, Folder folder, AccessType accessType) {
+    public SharedAccess(User owner, User collaborator, Folder folder, AccessType accessType) {
         this.file = null;
-        this.user = user;
+        this.collaborator = collaborator;
+        this.owner = owner;
         this.folder = folder;
         this.accessType = accessType;
     }
 
-    public SharedAccess(User user, File file, AccessType accessType) {
+    public SharedAccess(User owner, User collaborator, File file, AccessType accessType) {
         this.file = file;
-        this.user = user;
+        this.owner = owner;
+        this.collaborator = collaborator;
         this.folder = null;
         this.accessType = accessType;
     }

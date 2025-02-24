@@ -1,0 +1,79 @@
+databaseChangeLog:
+  - changeSet:
+      id: 021-rename-file-access-constraints
+      author: Julian Smith
+      changes:
+        # Drop old Primary Key and recreate with new name
+        - dropPrimaryKey:
+            tableName: shared_access
+            constraintName: pk_file_access
+
+        - addPrimaryKey:
+            tableName: shared_access
+            columnNames: id
+            constraintName: pk_shared_access
+
+        # Rename Indexes (drop and recreate)
+        - dropIndex:
+            indexName: idx_file_access_file
+            tableName: shared_access
+
+        - createIndex:
+            tableName: shared_access
+            indexName: idx_shared_access_file
+            columns:
+              - column:
+                  name: file_id
+
+        - dropIndex:
+            indexName: idx_file_access_user
+            tableName: shared_access
+
+        - createIndex:
+            tableName: shared_access
+            indexName: idx_shared_access_collaborator
+            columns:
+              - column:
+                  name: collaborator_id
+
+        # Rename Unique Constraints
+        - dropUniqueConstraint:
+            tableName: shared_access
+            constraintName: unique_user_folder_combination
+
+        - addUniqueConstraint:
+            tableName: shared_access
+            columnNames: collaborator_id, folder_id
+            constraintName: uq_shared_access_collaborator_folder
+
+        - dropUniqueConstraint:
+            tableName: shared_access
+            constraintName: uq_file_access_user_file
+
+        - addUniqueConstraint:
+            tableName: shared_access
+            columnNames: collaborator_id, file_id
+            constraintName: uq_shared_access_collaborator_file
+
+        # Rename Foreign Key Constraints
+        - dropForeignKeyConstraint:
+            baseTableName: shared_access
+            constraintName: fk_file_access_file
+
+        - addForeignKeyConstraint:
+            baseTableName: shared_access
+            baseColumnNames: file_id
+            referencedTableName: files
+            referencedColumnNames: id
+            constraintName: fk_shared_access_file
+
+        - dropForeignKeyConstraint:
+            baseTableName: shared_access
+            constraintName: fk_file_access_user
+
+        - addForeignKeyConstraint:
+            baseTableName: shared_access
+            baseColumnNames: collaborator_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_shared_access_collaborator

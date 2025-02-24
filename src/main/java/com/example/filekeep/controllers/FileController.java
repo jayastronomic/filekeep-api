@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.filekeep.dtos.ShareFileData;
+import com.example.filekeep.dtos.ShareData;
 import com.example.filekeep.reponses.ApiSuccessResponse;
 import com.example.filekeep.services.FileService;
 import com.example.filekeep.services.SharedAccessService;
@@ -65,7 +65,7 @@ public class FileController {
     }
 
     @PostMapping("/share")
-    public ResponseEntity<ApiSuccessResponse<String>> shareFile(@RequestBody ShareFileData payload) {
+    public ResponseEntity<ApiSuccessResponse<String>> shareFile(@RequestBody ShareData payload) {
         return ResponseEntity
                 .ok()
                 .body(

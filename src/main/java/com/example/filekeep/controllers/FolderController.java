@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.filekeep.dtos.FolderData;
 import com.example.filekeep.dtos.NewFolderData;
-import com.example.filekeep.dtos.ShareFolderData;
+import com.example.filekeep.dtos.ShareData;
 import com.example.filekeep.reponses.ApiSuccessResponse;
 import com.example.filekeep.services.FolderService;
 import com.example.filekeep.services.SharedAccessService;
@@ -65,7 +65,7 @@ public class FolderController {
 
 
     @PostMapping("/share")
-    public ResponseEntity<ApiSuccessResponse<String>> shareFile(@RequestBody ShareFolderData payload) {
+    public ResponseEntity<ApiSuccessResponse<String>> shareFile(@RequestBody ShareData payload) {
         return ResponseEntity
                 .ok()
                 .body(

@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.filekeep.dtos.ShareFileData;
-import com.example.filekeep.dtos.ShareFolderData;
+import com.example.filekeep.dtos.ShareData;
 import com.example.filekeep.dtos.SharedAccessData;
 import com.example.filekeep.enums.AccessType;
 import com.example.filekeep.models.File;
@@ -16,10 +15,9 @@ import com.example.filekeep.repositories.FileRepository;
 import com.example.filekeep.repositories.FolderRepository;
 import com.example.filekeep.repositories.SharedAccessRepository;
 import com.example.filekeep.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
 
-import lombok.AllArgsConstructor;
-
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class SharedAccessService extends ApplicationService {
     private final FileRepository fileRepository;
@@ -27,15 +25,15 @@ public class SharedAccessService extends ApplicationService {
     private final FolderRepository folderRepository;
     private final SharedAccessRepository sharedAccessRepository;
 
-    public String shareFile(ShareFileData payload) {
-        File fileToShare = fileRepository.findById(payload.fileId())
+    public String shareFile(ShareData payload) {
+        File fileToShare = fileRepository.findById(payload.id())
             .orElseThrow(() -> new RuntimeException("File does not exist"));
         
         List<User> shareList = userRepository.findByEmailIn(payload.userEmails());
     
         // Create shared access entries
         List<SharedAccess> sharedAccessList = shareList.stream().map(user -> {
-            return new SharedAccess(user, fileToShare, AccessType.VIEW);
+            return new SharedAccess(currentUser(), user, fileToShare, AccessType.VIEW);
         }).toList();
     
         // Save all shared access records in one batch
@@ -47,8 +45,8 @@ public class SharedAccessService extends ApplicationService {
                 shareList.size() + " users.";
     }
 
-    public String shareFolder(ShareFolderData payload) {
-        Folder folderToShare = folderRepository.findById(payload.folderId())
+    public String shareFolder(ShareData payload) {
+        Folder folderToShare = folderRepository.findById(payload.id())
             .orElseThrow(() -> new RuntimeException("Folder does not exist"));
     
         List<User> shareList = userRepository.findByEmailIn(payload.userEmails());
@@ -63,18 +61,18 @@ public class SharedAccessService extends ApplicationService {
     }
 
     public List<SharedAccessData> getSharedAssets(){
-        User currentUser = userRepository.findById(currentUser().getId())
-                                          .orElseThrow(() -> new RuntimeException("User does not exist"));
-        return SharedAccessData.transform(currentUser.getSharedAccesses());
+        List<SharedAccess> sharedAssets = sharedAccessRepository.findAllByOwnerIdOrCollaboratorId(currentUser().getId(), currentUser().getId());
+        return SharedAccessData.transform(sharedAssets);
     }
     
     private void shareFolderRecursively(Folder folder, List<User> users, AccessType accessType) {
+        User currentUser = currentUser();
         // Share the folder itself
-        users.forEach(user -> sharedAccessRepository.save(new SharedAccess(user, folder, accessType)));
+        users.forEach(user -> sharedAccessRepository.save(new SharedAccess(currentUser, user, folder, accessType)));
     
         // Share all files in the folder
         folder.getFiles().forEach(file -> {
-            users.forEach(user -> sharedAccessRepository.save(new SharedAccess(user, file, accessType)));
+            users.forEach(user -> sharedAccessRepository.save(new SharedAccess(currentUser, user, file, accessType)));
         });
     
         // Recursively share all subfolders and their contents

@@ -33,3 +33,9 @@ databaseChangeLog:
       file: db/changelog/change_file_id_to_nullable_on_shared_access.yaml
   - include:
       file: db/changelog/add_unique_constraint_to_shared_access.yaml
+  - include:
+      file: db/changelog/rename_user_id_on_shared_access.yaml
+  - include:
+      file: db/changelog/add_owner_id_to_shared_access.yaml
+  - include:
+      file: db/changelog/rename_file_access_constraints.yaml

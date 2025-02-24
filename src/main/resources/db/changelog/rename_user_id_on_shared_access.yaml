@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 020-rename-user-id-on-shared=access
+      author: Julian Smith
+      changes:
+        - renameColumn:
+            tableName: shared_access
+            oldColumnName: user_id
+            newColumnName: collaborator_id
+            columnDataType: UUID

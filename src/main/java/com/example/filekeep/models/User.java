@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.filekeep.dtos.NewUserData;
+import com.example.filekeep.dtos.UserData;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
@@ -41,8 +42,11 @@ public class User extends ApplicationEntity<User>{
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private final List<Folder> folders = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<SharedAccess> sharedAccesses = new ArrayList<>();
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<SharedAccess> ownedShares = new ArrayList<>();
+
+    @OneToMany(mappedBy = "collaborator", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SharedAccess> receivedShares = new ArrayList<>(); 
 
 
     public User(NewUserData userData, String encodedPassword) {
@@ -50,5 +54,11 @@ public class User extends ApplicationEntity<User>{
         this.password = encodedPassword;
         this.firstName = userData.firstName();
         this.lastName = userData.lastName();
+    }
+
+    public User(UserData userData) {
+        this.email = userData.getEmail();
+        this.firstName = userData.getFirstName();
+        this.lastName = userData.getLastName();
     }
 }

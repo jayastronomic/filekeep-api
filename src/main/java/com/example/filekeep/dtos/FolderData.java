@@ -15,6 +15,7 @@ public class FolderData {
     private final String folderName;
     private final List<SubFolderData> subFolders;
     private final List<FileData> files;
+    private final long whoCanAccess;
 
     public FolderData(Folder folder){
         this.id = folder.getId();
@@ -27,5 +28,6 @@ public class FolderData {
                             .stream()
                             .map(subFolder -> new SubFolderData(subFolder))
                             .toList();
+        this.whoCanAccess = folder.getCollaborators().size() + 1;
     }
 }

@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.example.filekeep.models.SharedAccess;
-import com.example.filekeep.models.User;
 
 @Repository
 public interface SharedAccessRepository extends JpaRepository<SharedAccess, UUID> {
-    List<SharedAccess> findAllByUser(User currentUser);
+    // Finds all SharedAccess where the user is either an owner or a collaborator
+    List<SharedAccess> findAllByOwnerIdOrCollaboratorId(UUID ownerId, UUID collaboratorId);
 }

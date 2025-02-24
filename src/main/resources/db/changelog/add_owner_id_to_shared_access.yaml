@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 021-add-owner-id-to-shared-access
+      author: Julian Smith
+      changes:
+        - addColumn:
+            tableName: shared_access
+            columns:
+              - column:
+                  name: owner_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_shared_access_owner
+                    references: users(id)
+                    onDelete: CASCADE

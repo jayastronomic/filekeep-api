@@ -52,10 +52,10 @@ public class AuthController {
         return ResponseEntity
                 .ok()
                 .body(ApiSuccessResponse.<UserData>builder()
-                .data(authService.isLoggedIn())
-                .message("User is authenticated")
-                .path("/api/v1/auth/logged_in")
-                .build()
+                        .data(authService.isLoggedIn())
+                        .message("User is authenticated")
+                        .path("/api/v1/auth/logged_in")
+                        .build()
                 );
         
     }

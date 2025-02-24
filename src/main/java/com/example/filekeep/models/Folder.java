@@ -47,7 +47,7 @@ public class Folder extends ApplicationEntity<Folder> {
     private final List<File> files = new ArrayList<>();
 
     @OneToMany(mappedBy = "folder",  orphanRemoval = true, cascade = CascadeType.ALL)
-    private final List<SharedAccess> SharedAccessList = new ArrayList<>();
+    private final List<SharedAccess> collaborators = new ArrayList<>();
 
     public Folder(String folderName, User user){
         this.folderName = folderName;

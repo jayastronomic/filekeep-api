@@ -13,6 +13,7 @@ public class FileData {
     private long size;
     private String mimeType;
     private String fileKey;
+    private final long whoCanAccess;
 
     public FileData(File file) {
         this.id = file.getId();
@@ -20,5 +21,6 @@ public class FileData {
         this.size = file.getSize();
         this.mimeType = file.getMimeType();
         this.fileKey = file.getFileKey();
+        this.whoCanAccess = file.getCollaborators().size() + 1;
     }
 }
