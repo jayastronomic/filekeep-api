@@ -58,6 +58,7 @@ public class FolderController {
         return ResponseEntity
                 .ok(ApiSuccessResponse.<String>builder()
                 .message("Folder successfully deleted with id: " + folderId)
+                .data(folderService.deleteFolder(folderId))
                 .path("/api/v1/folders/" + folderId)
                 .build()
                 );
