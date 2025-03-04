@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 024-add-access-type-to-shareable-link
+      author: Julian Smith
+      changes:
+        - addColumn:
+            tableName: shareable_links
+            columns:
+              - column:
+                  name: access_type
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false

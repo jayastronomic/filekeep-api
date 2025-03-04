@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 025-add-timestamps-to-shareable-link
+      author: Julian Smith
+      changes:
+        - addColumn:
+            tableName: shareable_links
+            columns:
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+        - addColumn:
+            tableName: shareable_links
+            columns:
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false

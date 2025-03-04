@@ -39,3 +39,11 @@ databaseChangeLog:
       file: db/changelog/add_owner_id_to_shared_access.yaml
   - include:
       file: db/changelog/rename_file_access_constraints.yaml
+  - include:
+      file: db/changelog/create_shareable_link_table.yaml
+  - include:
+      file: db/changelog/add_access_type_to_shareable_link.yaml
+  - include:
+      file: db/changelog/add_timestamps_to_shareable_link.yaml
+  - include:
+      file: db/changelog/add_token_to_shareable_link.yaml

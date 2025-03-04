@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 025-add-token-to-shareable-link
+      author: Julian Smith
+      changes:
+        - addColumn:
+            tableName: shareable_links
+            columns:
+              - column:
+                  name: token
+                  type: VARCHAR(80)
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: shareable_links
+            columnNames: token
+            constraintName: uq_shareable_link_token
+        - createIndex:
+            indexName: idx_shareable_link_token
+            tableName: shareable_links
+            columns:
+              - column:
+                  name: token

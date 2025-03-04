@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 023-create-shareable-link-table
+      author: Julian Smith
+      changes:
+        - createTable:
+            tableName: shareable_links
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_shareable_link
+                    nullable: false
+              - column:
+                  name: file_id
+                  type: UUID
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_shareable_link_file
+                    references: files(id)
+                    onDelete: CASCADE
+              - column:
+                  name: folder_id
+                  type: UUID
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_shareable_link_folder
+                    references: folders(id)
+                    onDelete: CASCADE
+        - addUniqueConstraint:
+            tableName: shareable_links
+            columnNames: file_id
+            constraintName: uq_shareable_link_file
+        - addUniqueConstraint:
+            tableName: shareable_links
+            columnNames: folder_id
+            constraintName: uq_shareable_link_folder

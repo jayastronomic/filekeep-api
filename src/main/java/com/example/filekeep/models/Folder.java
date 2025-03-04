@@ -8,9 +8,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -26,7 +28,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Folder extends ApplicationEntity<Folder> {
+public class Folder extends Asset<Folder> {
     @Column(nullable = false)
     @NotBlank(message = "Folder name cannot be blank")
     private String folderName;
@@ -49,8 +51,18 @@ public class Folder extends ApplicationEntity<Folder> {
     @OneToMany(mappedBy = "folder",  orphanRemoval = true, cascade = CascadeType.ALL)
     private final List<SharedAccess> collaborators = new ArrayList<>();
 
+    @OneToOne(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY )
+    private ShareableLink shareableLink;
+
     public Folder(String folderName, User user){
         this.folderName = folderName;
         this.user = user;
     }
+
+    public Folder(String folderName, User user, Folder parentFolder){
+        this.folderName = folderName;
+        this.user = user;
+        this.parentFolder = parentFolder;
+    }
+    
 }
