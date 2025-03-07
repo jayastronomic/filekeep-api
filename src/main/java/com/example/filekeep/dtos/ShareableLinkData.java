@@ -16,7 +16,9 @@ public class ShareableLinkData {
         this.shareableUrl = baseUrl + 
                             generateShareableUrl(link.getToken()) + 
                             "/" + 
-                            getAssetName(link);
+                            getAssetName(link) +
+                            "?" +
+                            getQueryParams(link);
     }
 
     private String generateShareableUrl(String token) {
@@ -29,5 +31,10 @@ public class ShareableLinkData {
         } else {
            return link.getFolder().getFolderName();
         }
+    }
+
+    private String getQueryParams(ShareableLink link){
+        int type = link.getFile() != null ? 0 : 1;
+        return "t=" + type;
     }
 }

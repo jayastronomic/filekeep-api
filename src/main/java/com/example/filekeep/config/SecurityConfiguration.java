@@ -18,9 +18,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
-     private final AccessDeniedHandler customAccessDeniedHandler;
+    private final AccessDeniedHandler customAccessDeniedHandler;
 
-     public SecurityConfiguration(AccessDeniedHandler customAccessDeniedHandler) {
+    public SecurityConfiguration(AccessDeniedHandler customAccessDeniedHandler) {
         this.customAccessDeniedHandler = customAccessDeniedHandler;
     }
 
@@ -40,7 +40,9 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers(
                         "/api/v1/auth/login",
-                        "/api/v1/auth/register"
+                        "/api/v1/auth/register",
+                        "/api/v1/shareable_links/file",
+                        "/api/v1/shareable_links/folder"
                         ).permitAll()
                 .anyRequest().authenticated());
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
