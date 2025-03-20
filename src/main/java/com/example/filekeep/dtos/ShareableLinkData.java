@@ -3,6 +3,7 @@ package com.example.filekeep.dtos;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+import com.example.filekeep.enums.LinkAccessType;
 import com.example.filekeep.models.ShareableLink;
 
 import lombok.Getter;
@@ -10,6 +11,8 @@ import lombok.Getter;
 @Getter
 public class ShareableLinkData {
     private final String shareableUrl;
+    private final LinkAccessType linkAccessType;
+    private final String token;
     private static final String baseUrl = "http://localhost:5173/s/";
 
     public ShareableLinkData(ShareableLink link){
@@ -19,6 +22,8 @@ public class ShareableLinkData {
                             getAssetName(link) +
                             "?" +
                             getQueryParams(link);
+        this.linkAccessType = link.getAccessType();
+        this.token = link.getToken();
     }
 
     private String generateShareableUrl(String token) {

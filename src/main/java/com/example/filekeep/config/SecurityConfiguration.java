@@ -1,8 +1,10 @@
 package com.example.filekeep.config;
 
 import com.example.filekeep.jwt.JwtRequestFilter;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -38,9 +40,9 @@ public class SecurityConfiguration {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests((requests) -> requests
-                .requestMatchers(
-                        "/api/v1/auth/login",
-                        "/api/v1/auth/register",
+                .requestMatchers(HttpMethod.PUT, "/api/v1/shareable_links/file").authenticated()
+                .requestMatchers(HttpMethod.POST,"/api/v1/auth/login", "/api/v1/auth/register").permitAll()
+                .requestMatchers(HttpMethod.GET,
                         "/api/v1/shareable_links/file",
                         "/api/v1/shareable_links/folder"
                         ).permitAll()

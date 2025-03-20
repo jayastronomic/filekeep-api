@@ -2,9 +2,13 @@ package com.example.filekeep.services;
 
 import org.springframework.stereotype.Service;
 
+import com.example.filekeep.dtos.FileData;
 import com.example.filekeep.dtos.NewShareableLinkData;
 import com.example.filekeep.dtos.ShareableFileData;
+import com.example.filekeep.dtos.ShareableFolderData;
 import com.example.filekeep.dtos.ShareableLinkData;
+import com.example.filekeep.dtos.UpdateShareableLinkData;
+import com.example.filekeep.enums.LinkAccessType;
 import com.example.filekeep.models.File;
 import com.example.filekeep.models.Folder;
 import com.example.filekeep.models.ShareableLink;
@@ -49,9 +53,16 @@ public class ShareableLinkService extends ApplicationService {
         return new ShareableFileData(shareableLink.getFile(), stream);
     }
 
-    public Folder getShareableFolder(String token){
+    public ShareableFolderData getShareableFolder(String token){
         ShareableLink shareableLink = shareableLinkRepository.findByToken(token)
                                         .orElseThrow(() -> new RuntimeException("Link does not exist"));
-        return shareableLink.getFolder();
+        return new ShareableFolderData(shareableLink.getFolder());
+    }
+
+    public FileData updateFileShareableLinkAccess(String token, UpdateShareableLinkData linkData){
+        ShareableLink shareableLink = shareableLinkRepository.findByToken(token)
+                                        .orElseThrow(() -> new RuntimeException("Link does not exist"));
+        shareableLink.setAccessType(LinkAccessType.valueOf(linkData.linkAccessType()));
+        return  new FileData(shareableLinkRepository.save(shareableLink).getFile());
     }
 }
