@@ -2,6 +2,7 @@ package com.example.filekeep.dtos;
 
 import java.util.UUID;
 
+import com.example.filekeep.models.Folder;
 import com.example.filekeep.models.User;
 
 import lombok.Getter;
@@ -12,11 +13,13 @@ public class UserData {
     private String email;
     private String firstName;
     private String lastName;
+    private UUID rootFolderId;
 
-    public UserData(User user){
+    public UserData(User user, Folder folder){
         this.id = user.getId();
         this.email = user.getEmail();
         this.firstName  = user.getEmail();
         this.lastName = user.getLastName();
+        this.rootFolderId = folder.getId();
     }
 }

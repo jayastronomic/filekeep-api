@@ -37,7 +37,6 @@ public class FileService extends ApplicationService {
                                             .orElseThrow(() -> new FolderDoesNotExistException(folderId.toString()));
         ;
         
-        Arrays.asList(null);
         // Create and save new File entity
         File newFile = File.builder()
             .fileKey(fileKey)

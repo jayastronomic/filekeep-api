@@ -34,7 +34,7 @@ public class FileController {
     private final FolderService folderService;
 
     @PostMapping(path = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ApiSuccessResponse<String>> upload(@RequestParam("file") MultipartFile file, @RequestParam("foder_id") UUID folderId  ){
+    public ResponseEntity<ApiSuccessResponse<String>> upload(@RequestParam("file") MultipartFile file, @RequestParam("folder_id") UUID folderId  ){
         return ResponseEntity
                 .created(URI.create("/api/v1/files/upload"))
                 .body(ApiSuccessResponse.<String>builder()

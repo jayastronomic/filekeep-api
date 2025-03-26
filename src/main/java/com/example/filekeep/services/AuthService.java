@@ -10,6 +10,7 @@ import com.example.filekeep.exceptions.UserAlreadyExistException;
 import com.example.filekeep.jwt.JwtUtils;
 import com.example.filekeep.models.Folder;
 import com.example.filekeep.models.User;
+import com.example.filekeep.repositories.FolderRepository;
 import com.example.filekeep.repositories.UserRepository;
 
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService extends ApplicationService{
     private final UserRepository userRepository;
+    private final FolderRepository folderRepository;
     private final @Lazy PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
@@ -53,6 +55,9 @@ public class AuthService extends ApplicationService{
     }
 
     public UserData isLoggedIn(){
-        return new UserData(currentUser());
+        User currentUser = currentUser();
+        Folder rootFolder = folderRepository.getRootFolder(currentUser.getId())
+                            .orElseThrow(() -> new RuntimeException("Root folder does not exist"));
+        return new UserData(currentUser(), rootFolder);
     }
 }
