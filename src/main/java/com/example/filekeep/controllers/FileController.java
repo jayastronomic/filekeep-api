@@ -1,6 +1,7 @@
 package com.example.filekeep.controllers;
 
 import java.net.URI;
+import java.util.UUID;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.filekeep.dtos.ShareData;
 import com.example.filekeep.reponses.ApiSuccessResponse;
 import com.example.filekeep.services.FileService;
+import com.example.filekeep.services.FolderService;
 import com.example.filekeep.services.SharedAccessService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,14 +31,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class FileController {
     private final FileService fileService;
     private final SharedAccessService sharedAccessService;
+    private final FolderService folderService;
 
     @PostMapping(path = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ApiSuccessResponse<String>> upload(@RequestParam("file") MultipartFile file, @RequestParam("folder_name") String folderName){
+    public ResponseEntity<ApiSuccessResponse<String>> upload(@RequestParam("file") MultipartFile file, @RequestParam("foder_id") UUID folderId  ){
         return ResponseEntity
                 .created(URI.create("/api/v1/files/upload"))
                 .body(ApiSuccessResponse.<String>builder()
-                .data(fileService.uploadFile(file, folderName))
-                .message("File uploaded succesfully to " + folderName + " folder")
+                .data(fileService.uploadFile(file, folderId))
+                .message("File uploaded succesfully to folder with ID: " + folderId)
                 .path("/api/v1/files/upload")
                 .build()
                 );
@@ -74,6 +77,19 @@ public class FileController {
                     .message("Successfully shared file.")
                     .path("/api/v1/files/share_file")
                     .build()
+                );
+    }
+
+    @PostMapping(path = "/sync/manual", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiSuccessResponse<String>> sync(@RequestParam("files") MultipartFile[] files) {
+        return ResponseEntity
+                .ok()
+                .body(
+                    ApiSuccessResponse.<String>builder()
+                    .data(folderService.sync(files))
+                    .message("Successfully synced")
+                    .path("/api/v1/files/sync/manual")
+                    .build() 
                 );
     }
 }

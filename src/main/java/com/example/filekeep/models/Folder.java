@@ -54,6 +54,15 @@ public class Folder extends Asset<Folder> {
     @OneToOne(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY )
     private ShareableLink shareableLink;
 
+
+    public Folder getFolderByName(String existingFolder){
+       return this.subFolders.stream()
+                        .filter(f -> f.getFolderName().equals(existingFolder))
+                        .findFirst()
+                        .orElse(null);
+                        
+    }
+
     public Folder(String folderName, User user){
         this.folderName = folderName;
         this.user = user;

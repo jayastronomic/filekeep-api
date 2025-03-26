@@ -29,13 +29,27 @@ public class FolderController {
     private final FolderService folderService;
     private final SharedAccessService sharedAccessService;
 
-    @GetMapping("/{folderName}")
-    public ResponseEntity<ApiSuccessResponse<FolderData>> getFolder(@PathVariable("folderName") String folderName){
+
+    @GetMapping("/home")
+    public ResponseEntity<ApiSuccessResponse<FolderData>> getHomeFolder(){
         return ResponseEntity
                 .ok(ApiSuccessResponse.<FolderData>builder()
-                .message(folderName + " folder successfully fetched")
-                .data(folderService.getFolder(folderName))
-                .path("/api/v1/folders/" + folderName)
+                .message("Home folder successfully fetched")
+                .data(folderService.getHomeFolder())
+                .path("/api/v1/folders/home")
+                .build()
+                );
+    }
+
+
+
+    @GetMapping("/{folderId}")
+    public ResponseEntity<ApiSuccessResponse<FolderData>> getFolder(@PathVariable("folderId") UUID folderId){
+        return ResponseEntity
+                .ok(ApiSuccessResponse.<FolderData>builder()
+                .message(folderId + " folder successfully fetched")
+                .data(folderService.getFolder(folderId))
+                .path("/api/v1/folders/" + folderId)
                 .build()
                 );
     }

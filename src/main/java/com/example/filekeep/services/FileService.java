@@ -1,5 +1,8 @@
 package com.example.filekeep.services;
 
+import java.util.Map;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,6 +13,7 @@ import com.example.filekeep.models.User;
 import com.example.filekeep.repositories.FileRepository;
 import com.example.filekeep.repositories.FolderRepository;
 
+import io.jsonwebtoken.lang.Arrays;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -19,7 +23,7 @@ public class FileService extends ApplicationService {
     private final FolderRepository folderRepository;
     private final S3Service s3sService;
     
-    public String uploadFile(MultipartFile file, String folderName) throws FolderDoesNotExistException {
+    public String uploadFile(MultipartFile file, UUID folderId) throws FolderDoesNotExistException {
         User user = currentUser();
     
         // Create file key for  S3
@@ -29,18 +33,19 @@ public class FileService extends ApplicationService {
         s3sService.uploadFileToAWS(file, fileKey);
     
         // Fetch the folder to save in
-        Folder folder = folderRepository.getFolderByUserIdAndFolderName(user.getId(), folderName)
-                                            .orElseThrow(() -> new FolderDoesNotExistException(folderName));
+        Folder folderToSave = folderRepository.findById(folderId)
+                                            .orElseThrow(() -> new FolderDoesNotExistException(folderId.toString()));
         ;
         
+        Arrays.asList(null);
         // Create and save new File entity
         File newFile = File.builder()
             .fileKey(fileKey)
             .size(file.getSize())
             .mimeType(file.getContentType())
-            .fileName(file.getOriginalFilename())
+            .fileName(Arrays.asList(file.getOriginalFilename().split("/")).getLast())
             .user(user)
-            .folder(folder)
+            .folder(folderToSave)
             .build();
         
         fileRepository.save(newFile); // Save file
@@ -58,5 +63,11 @@ public class FileService extends ApplicationService {
             .orElseThrow(() -> new RuntimeException("File not found: " + fileKey));
         fileRepository.delete(file);
         return "File successfully deleted";
+    }
+
+
+    public void saveFile(MultipartFile file, String fileName, Folder folder) {
+        File existingFile = fileRepository.findByFileNameAndFolder(fileName, folder);
+        if (existingFile == null) uploadFile(file, folder.getId());
     }
 }
