@@ -1,6 +1,5 @@
 package com.example.filekeep.services;
 
-import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -27,7 +26,7 @@ public class FileService extends ApplicationService {
         User user = currentUser();
     
         // Create file key for  S3
-        String fileKey = user.getId() + "_" + System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        String fileKey = user.getId() + "_" + System.currentTimeMillis() + "_" + Arrays.asList(file.getOriginalFilename().split("/")).getLast();
         
         // Upload file to S3 with file key
         s3sService.uploadFileToAWS(file, fileKey);

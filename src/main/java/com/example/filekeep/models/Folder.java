@@ -42,7 +42,7 @@ public class Folder extends Asset<Folder> {
     @JoinColumn(name = "parent_folder_id")
     private Folder parentFolder;
 
-    @OneToMany(mappedBy = "parentFolder", orphanRemoval = true)
+    @OneToMany(mappedBy = "parentFolder", orphanRemoval = true, fetch = FetchType.EAGER)
     private final List<Folder> subFolders = new ArrayList<>();
 
     @OneToMany(mappedBy = "folder", orphanRemoval = true, cascade = CascadeType.ALL)

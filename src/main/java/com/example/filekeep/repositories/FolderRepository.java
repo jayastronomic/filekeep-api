@@ -17,7 +17,4 @@ public interface FolderRepository extends JpaRepository<Folder, UUID> {
 
     @Query("SELECT f FROM Folder f WHERE f.user.id = :userId AND f.parentFolder IS NULL")
     Optional<Folder> getRootFolder(@Param("userId") UUID userId);
-
-    // @Query("SELECT f FROM Folder f WHERE f.folderName = :folderName AND f.parent.id = :parentId AND f.user.id = :userId" )
-    // Optional<Folder> findByFolderNameAndParentAndUser(@Param("folderName") String foldername, @Param("parentId") UUID parentId, @Param("userId") UUID userId);
 }

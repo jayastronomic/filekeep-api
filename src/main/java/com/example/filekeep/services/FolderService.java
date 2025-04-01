@@ -36,7 +36,7 @@ public class FolderService extends ApplicationService {
     public FolderData createFolder(NewFolderData payload) throws FolderDoesNotExistException {
         User currentUser = currentUser();
         Folder parentFolder = folderRepository.findById(payload.parentFolderId())
-                                .orElseThrow(() -> new FolderDoesNotExistException(payload.parentName()));
+                                .orElseThrow(() -> new FolderDoesNotExistException(payload.parentFolderId().toString()));
         Folder newFolder = new Folder(payload.folderName(), currentUser, parentFolder);
         Folder savedFolder = this.folderRepository.save(newFolder);
         return new FolderData(savedFolder);
