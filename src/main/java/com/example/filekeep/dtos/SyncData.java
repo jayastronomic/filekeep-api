@@ -1,5 +1,6 @@
 package com.example.filekeep.dtos;
 
-import jakarta.validation.constraints.NotBlank;
+import org.springframework.web.multipart.MultipartFile;
 
-public record SyncData(@NotBlank(message = "Folder path cannot be blank") String folderPath) {}
+
+public record SyncData(MultipartFile[] files) {}

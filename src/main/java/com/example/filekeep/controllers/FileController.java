@@ -80,17 +80,17 @@ public class FileController {
                 );
     }
 
-    @PostMapping(path = "/sync/manual", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiSuccessResponse<String>> sync(@RequestParam("files") MultipartFile[] files) {
-        return ResponseEntity
-                .ok()
-                .body(
-                    ApiSuccessResponse.<String>builder()
-                    .data(folderService.sync(files))
-                    .message("Successfully synced")
-                    .path("/api/v1/files/sync/manual")
-                    .build() 
-                );
-    }
+    // @PostMapping(path = "/sync/manual", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    // public ResponseEntity<ApiSuccessResponse<String>> sync(@RequestParam("files") MultipartFile[] files) {
+    //     return ResponseEntity
+    //             .ok()
+    //             .body(
+    //                 ApiSuccessResponse.<String>builder()
+    //                 .data(folderService.sync(files))
+    //                 .message("Successfully synced")
+    //                 .path("/api/v1/files/sync/manual")
+    //                 .build() 
+    //             );
+    // }
 }
 

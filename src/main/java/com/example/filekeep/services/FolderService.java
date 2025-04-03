@@ -66,40 +66,6 @@ public class FolderService extends ApplicationService {
         return filesInCurrentFolder;
     }
 
-    public String sync(MultipartFile[] files) {
-        User currentUser = currentUser();
-        Folder home = folderRepository.getRootFolder(currentUser.getId())
-                    .orElseThrow(() -> new FolderDoesNotExistException("home"));
-
-        for (MultipartFile file : files) {
-            String relativePath = file.getOriginalFilename(); // webkitRelativePath from frontend
-            List<String> pathParts = Arrays.asList(relativePath.split("/"));
-            List<String> folders = pathParts.subList(1, pathParts.size() - 1);
-            Folder parentFolder = home;
-
-            // Skip .DS_Store files
-            if (relativePath.equals(".DS_Store") || relativePath.endsWith("/.DS_Store")) {
-                logger.info("Skipping .DS_Store file: {}", relativePath);
-                continue; // Skip processing this file
-            }
-
-            // Traverse and create/check folders
-            for (String folder : folders) {
-                Folder existingFolder = parentFolder.getFolderByName(folder);                          
-                if (existingFolder == null) {
-                    existingFolder = new Folder(folder, currentUser, parentFolder);
-                    existingFolder = folderRepository.save(existingFolder);
-                }
-                parentFolder = existingFolder;
-            }
-
-            // Handle the file
-            fileService.saveFile(file, pathParts.get(pathParts.size() - 1), parentFolder);
-        }
-        logger.info("\u001B[32mSynced\u001B[0m");
-        return "synced";
-    }
-
     public FolderData getHomeFolder() {
       return new FolderData(folderRepository.getRootFolder(currentUser().getId())
                     .orElseThrow(() -> new RuntimeException("Root folder does not exist")));

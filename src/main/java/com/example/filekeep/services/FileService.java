@@ -67,5 +67,6 @@ public class FileService extends ApplicationService {
     public void saveFile(MultipartFile file, String fileName, Folder folder) {
         File existingFile = fileRepository.findByFileNameAndFolder(fileName, folder);
         if (existingFile == null) uploadFile(file, folder.getId());
+        System.out.println("File already exists: " + existingFile.getFileName());
     }
 }
