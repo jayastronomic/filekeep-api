@@ -5,7 +5,6 @@ import com.example.filekeep.dtos.LoginData;
 import com.example.filekeep.dtos.NewUserData;
 import com.example.filekeep.dtos.UserData;
 import com.example.filekeep.exceptions.InvalidCredentialsException;
-import com.example.filekeep.exceptions.PasswordMismatchException;
 import com.example.filekeep.exceptions.UserAlreadyExistException;
 import com.example.filekeep.jwt.JwtUtils;
 import com.example.filekeep.models.Folder;
@@ -32,10 +31,9 @@ public class AuthService extends ApplicationService{
     private final AuthenticationManager authenticationManager;
 
   
-    public String register(NewUserData payload) throws UserAlreadyExistException, PasswordMismatchException {
+    public String register(NewUserData payload) throws UserAlreadyExistException {
         boolean exists = userRepository.existsByEmail(payload.email());
         if (exists) throw new UserAlreadyExistException(payload.email());
-        if (!payload.password().equals(payload.passwordConfirmation())) throw new PasswordMismatchException();
         User newUser = new User(payload, passwordEncoder.encode(payload.password()));                   
         newUser.getFolders().add(new Folder("home", newUser));
         newUser = userRepository.save(newUser);

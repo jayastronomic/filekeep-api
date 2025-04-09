@@ -18,7 +18,7 @@ public class UserData {
     public UserData(User user, Folder folder){
         this.id = user.getId();
         this.email = user.getEmail();
-        this.firstName  = user.getEmail();
+        this.firstName  = user.getFirstName();
         this.lastName = user.getLastName();
         this.rootFolderId = folder.getId();
     }

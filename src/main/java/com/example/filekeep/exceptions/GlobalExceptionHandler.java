@@ -47,18 +47,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(PasswordMismatchException.class)
-    public ResponseEntity<ApiErrorResponse> handleValidationExceptions(PasswordMismatchException ex) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ApiErrorResponse.builder()
-                        .message(ex.getMessage())
-                        .build()
-                );
-    }
-
-
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<ApiErrorResponse> handleUserAlreadyExistExceptions(InvalidCredentialsException ex) {
