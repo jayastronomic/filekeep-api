@@ -29,7 +29,5 @@ public class SharedAccessController {
                         .message("Successfully fetched shared assets")
                         .build()
                         );
-    }
-    
-    
+    }  
 }

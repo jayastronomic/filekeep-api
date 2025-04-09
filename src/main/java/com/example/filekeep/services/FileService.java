@@ -47,7 +47,6 @@ public class FileService extends ApplicationService {
             .build();
         
         fileRepository.save(newFile); // Save file
-    
         return "File uploaded successfully: " + file.getName();
     }
 
@@ -67,6 +66,6 @@ public class FileService extends ApplicationService {
     public void saveFile(MultipartFile file, String fileName, Folder folder) {
         File existingFile = fileRepository.findByFileNameAndFolder(fileName, folder);
         if (existingFile == null) uploadFile(file, folder.getId());
-        System.out.println("File already exists: " + existingFile.getFileName());
+        else System.out.println("File already exists: " + existingFile.getFileName());
     }
 }

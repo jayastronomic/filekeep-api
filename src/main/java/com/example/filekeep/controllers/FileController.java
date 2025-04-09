@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.filekeep.dtos.ShareData;
 import com.example.filekeep.reponses.ApiSuccessResponse;
 import com.example.filekeep.services.FileService;
-import com.example.filekeep.services.FolderService;
 import com.example.filekeep.services.SharedAccessService;
 
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class FileController {
     private final FileService fileService;
     private final SharedAccessService sharedAccessService;
-    private final FolderService folderService;
 
     @PostMapping(path = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ApiSuccessResponse<String>> upload(@RequestParam("file") MultipartFile file, @RequestParam("folder_id") UUID folderId  ){
@@ -79,18 +77,5 @@ public class FileController {
                     .build()
                 );
     }
-
-    // @PostMapping(path = "/sync/manual", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    // public ResponseEntity<ApiSuccessResponse<String>> sync(@RequestParam("files") MultipartFile[] files) {
-    //     return ResponseEntity
-    //             .ok()
-    //             .body(
-    //                 ApiSuccessResponse.<String>builder()
-    //                 .data(folderService.sync(files))
-    //                 .message("Successfully synced")
-    //                 .path("/api/v1/files/sync/manual")
-    //                 .build() 
-    //             );
-    // }
 }
 

@@ -60,4 +60,15 @@ public class File extends Asset<File> {
 
     @OneToOne(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY )
     private ShareableLink shareableLink;
+
+    public String getFileRemoteFilePath(){
+        if(this.folder.getFolderName().equals("home")) return this.fileName;
+        StringBuilder fullPath = new StringBuilder();
+        Folder parentFolder = this.folder;
+        while(parentFolder != null){
+            fullPath.insert(0, parentFolder.getFolderName() + "/");
+            parentFolder = parentFolder.getParentFolder();
+        }
+        return "/" + fullPath.toString().replaceFirst("^home/", "") + this.fileName;
+    }
 }
