@@ -23,14 +23,14 @@ public class FolderService extends ApplicationService {
 
     public FolderData getFolder(UUID folderId) throws FolderDoesNotExistException {
         Folder folder = folderRepository.findById(folderId)
-                            .orElseThrow(() -> new FolderDoesNotExistException(folderId.toString()));
+                            .orElseThrow(() -> new FolderDoesNotExistException(folderId));
         return new FolderData(folder);
     }
 
     public FolderData createFolder(NewFolderData payload) throws FolderDoesNotExistException {
         User currentUser = currentUser();
         Folder parentFolder = folderRepository.findById(payload.parentFolderId())
-                                .orElseThrow(() -> new FolderDoesNotExistException(payload.parentFolderId().toString()));
+                                .orElseThrow(() -> new FolderDoesNotExistException(payload.parentFolderId()));
         Folder newFolder = new Folder(payload.folderName(), currentUser, parentFolder);
         Folder savedFolder = this.folderRepository.save(newFolder);
         return new FolderData(savedFolder);
@@ -38,7 +38,7 @@ public class FolderService extends ApplicationService {
 
     public String deleteFolder(UUID folderId) throws RuntimeException {
         Folder folder = folderRepository.findById(folderId)
-        .orElseThrow(() -> new RuntimeException("Folder does not exist with id: " + folderId));
+        .orElseThrow(() -> new FolderDoesNotExistException(folderId));
         List<File> allFiles = getAllFilesInFolder(folder);
         List<String> fileKeys = allFiles.stream().map(File::getFileKey).toList();
         
@@ -62,7 +62,7 @@ public class FolderService extends ApplicationService {
 
     public FolderData getHomeFolder() {
       return new FolderData(folderRepository.getRootFolder(currentUser().getId())
-                    .orElseThrow(() -> new RuntimeException("Root folder does not exist")));
+                    .orElseThrow(() -> new FolderDoesNotExistException("home")));
     }
 }
 

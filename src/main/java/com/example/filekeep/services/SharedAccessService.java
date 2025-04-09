@@ -1,12 +1,15 @@
 package com.example.filekeep.services;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
 import com.example.filekeep.dtos.ShareData;
 import com.example.filekeep.dtos.SharedAccessData;
 import com.example.filekeep.enums.AccessType;
+import com.example.filekeep.exceptions.FileDoesNotExistException;
+import com.example.filekeep.exceptions.FolderDoesNotExistException;
 import com.example.filekeep.models.File;
 import com.example.filekeep.models.Folder;
 import com.example.filekeep.models.SharedAccess;
@@ -26,8 +29,9 @@ public class SharedAccessService extends ApplicationService {
     private final SharedAccessRepository sharedAccessRepository;
 
     public String shareFile(ShareData payload) {
-        File fileToShare = fileRepository.findById(payload.id())
-            .orElseThrow(() -> new RuntimeException("File does not exist"));
+        UUID id = payload.id();
+        File fileToShare = fileRepository.findById(id)
+            .orElseThrow(() -> new FileDoesNotExistException(id));
         
         List<User> shareList = userRepository.findByEmailIn(payload.userEmails());
     
@@ -46,8 +50,9 @@ public class SharedAccessService extends ApplicationService {
     }
 
     public String shareFolder(ShareData payload) {
-        Folder folderToShare = folderRepository.findById(payload.id())
-            .orElseThrow(() -> new RuntimeException("Folder does not exist"));
+        UUID id = payload.id();
+        Folder folderToShare = folderRepository.findById(id)
+            .orElseThrow(() -> new FolderDoesNotExistException(id));
     
         List<User> shareList = userRepository.findByEmailIn(payload.userEmails());
     

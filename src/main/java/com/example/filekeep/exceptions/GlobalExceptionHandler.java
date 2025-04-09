@@ -85,4 +85,26 @@ public class GlobalExceptionHandler {
                         .build()
                 );
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(FileDoesNotExistException.class)
+    public ResponseEntity<ApiErrorResponse> handleFileDoesNotExistException(FileDoesNotExistException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ApiErrorResponse.builder()
+                        .message(ex.getMessage())
+                        .build()
+                );
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ShareableLinkDoesNotExistException.class)
+    public ResponseEntity<ApiErrorResponse> handleShareableLinkDoesNotExistException(ShareableLinkDoesNotExistException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ApiErrorResponse.builder()
+                        .message(ex.getMessage())
+                        .build()
+                );
+    }
 }

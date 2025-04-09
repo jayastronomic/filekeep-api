@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.filekeep.exceptions.FileDoesNotExistException;
 import com.example.filekeep.exceptions.FolderDoesNotExistException;
 import com.example.filekeep.models.File;
 import com.example.filekeep.models.Folder;
@@ -33,7 +34,7 @@ public class FileService extends ApplicationService {
     
         // Fetch the folder to save in
         Folder folderToSave = folderRepository.findById(folderId)
-                                            .orElseThrow(() -> new FolderDoesNotExistException(folderId.toString()));
+                                            .orElseThrow(() -> new FolderDoesNotExistException(folderId));
         ;
         
         // Create and save new File entity
@@ -55,9 +56,9 @@ public class FileService extends ApplicationService {
     }
 
     public String deleteFile(String fileKey){
-        s3sService.deleteFileFromAWS(fileKey);
         File file = fileRepository.findByFileKey(fileKey)
-            .orElseThrow(() -> new RuntimeException("File not found: " + fileKey));
+            .orElseThrow(() -> new FileDoesNotExistException(fileKey)); 
+        s3sService.deleteFileFromAWS(file.getFileKey());
         fileRepository.delete(file);
         return "File successfully deleted";
     }

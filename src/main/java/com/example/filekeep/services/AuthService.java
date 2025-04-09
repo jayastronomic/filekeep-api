@@ -4,6 +4,7 @@ import com.example.filekeep.config.AuthUserDetails;
 import com.example.filekeep.dtos.LoginData;
 import com.example.filekeep.dtos.NewUserData;
 import com.example.filekeep.dtos.UserData;
+import com.example.filekeep.exceptions.FolderDoesNotExistException;
 import com.example.filekeep.exceptions.InvalidCredentialsException;
 import com.example.filekeep.exceptions.UserAlreadyExistException;
 import com.example.filekeep.jwt.JwtUtils;
@@ -55,7 +56,7 @@ public class AuthService extends ApplicationService{
     public UserData isLoggedIn(){
         User currentUser = currentUser();
         Folder rootFolder = folderRepository.getRootFolder(currentUser.getId())
-                            .orElseThrow(() -> new RuntimeException("Root folder does not exist"));
+                            .orElseThrow(() -> new FolderDoesNotExistException("home"));
         return new UserData(currentUser(), rootFolder);
     }
 }
