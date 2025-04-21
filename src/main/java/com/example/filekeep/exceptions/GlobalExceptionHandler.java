@@ -107,4 +107,15 @@ public class GlobalExceptionHandler {
                         .build()
                 );
     }
+
+    @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
+    @ExceptionHandler(MaxFileStorageException.class)
+    public ResponseEntity<ApiErrorResponse> handleMaxFileStorageException(MaxFileStorageException ex) {
+        return ResponseEntity
+                .status(HttpStatus.PAYLOAD_TOO_LARGE)
+                .body(ApiErrorResponse.builder()
+                        .message(ex.getMessage())
+                        .build()
+                );
+    }
 }
