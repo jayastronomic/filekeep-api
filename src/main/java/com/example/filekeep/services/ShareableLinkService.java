@@ -2,6 +2,7 @@ package com.example.filekeep.services;
 
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.example.filekeep.dtos.FileData;
@@ -21,10 +22,10 @@ import com.example.filekeep.repositories.FileRepository;
 import com.example.filekeep.repositories.FolderRepository;
 import com.example.filekeep.repositories.ShareableLinkRepository;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ShareableLinkService extends ApplicationService {
     private final ShareableLinkRepository shareableLinkRepository;
     private final FolderRepository folderRepository;

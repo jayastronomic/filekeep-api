@@ -13,10 +13,9 @@ public class ShareableLinkData {
     private final String shareableUrl;
     private final LinkAccessType linkAccessType;
     private final String token;
-    private static final String baseUrl = "http://localhost:5173/s/";
 
     public ShareableLinkData(ShareableLink link){
-        this.shareableUrl = baseUrl + 
+        this.shareableUrl = "/s/" + 
                             generateShareableUrl(link.getToken()) + 
                             "/" + 
                             getAssetName(link) +
